@@ -11,10 +11,10 @@ const app = express();
 
 // ✅ Logování SMTP konfigurace (pro ladění)
 console.log("✅ SMTP Nastavení:");
-console.log("SMTP_HOST:", process.env.SMTP_HOST);
-console.log("SMTP_PORT:", process.env.SMTP_PORT);
-console.log("SMTP_USER:", process.env.SMTP_USER);
-console.log("SMTP_PASS:", process.env.SMTP_PASS ? "✔ [skryto]" : "❌ CHYBÍ!");
+console.log("SMTP_HOST:", process.env.SMTP_HOST || "❌ NENÍ NASTAVENO");
+console.log("SMTP_PORT:", process.env.SMTP_PORT || "❌ NENÍ NASTAVENO");
+console.log("SMTP_USER:", process.env.SMTP_USER || "❌ NENÍ NASTAVENO");
+console.log("SMTP_PASS:", process.env.SMTP_PASS ? "✔ [skryto]" : "❌ NENÍ NASTAVENO");
 
 // ✅ Povolení CORS
 app.use(cors());
@@ -98,7 +98,7 @@ app.post('/api/generate-pdf', async (req, res) => {
         const transporter = nodemailer.createTransport({
           host: process.env.SMTP_HOST,
           port: parseInt(process.env.SMTP_PORT, 10) || 587,
-          secure: process.env.SMTP_PORT === '465', // True pokud používáte SSL
+          secure: parseInt(process.env.SMTP_PORT, 10) === 465, // True pokud používáte SSL
           auth: {
             user: process.env.SMTP_USER,
             pass: process.env.SMTP_PASS,
@@ -150,7 +150,7 @@ app.post('/api/generate-pdf', async (req, res) => {
   }
 });
 
-// ✅ Spuštění serveru (naslouchání na všech IP)
+// ✅ Spuštění serveru
 const PORT = process.env.PORT || 1337;
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Server běží na portu: ${PORT}`);
