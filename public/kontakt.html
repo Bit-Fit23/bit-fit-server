@@ -111,7 +111,7 @@
       formMessage.textContent = "Odesílám zprávu...";
 
       try {
-        const response = await fetch('http://localhost:3000/contact', {
+        const response = await fetch('/contact', { // Používáme relativní URL
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ name, email, subject, message }),
