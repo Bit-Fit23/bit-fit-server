@@ -135,7 +135,13 @@
         paymentMethod: method,
       };
 
-      fetch('http://localhost:3000/api/generate-pdf', {
+      // Automatické rozpoznání, jestli se nacházíme na localhostu nebo na Heroku
+      const apiUrl =
+        window.location.hostname === 'localhost'
+          ? 'http://localhost:3000/api/generate-pdf'
+          : 'https://bit-fit-server-e57aec3208e1.herokuapp.com/api/generate-pdf';
+
+      fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(orderData),
@@ -156,7 +162,7 @@
         })
         .catch((error) => {
           alert(`Došlo k chybě při odesílání objednávky: ${error.message}. Zkuste to prosím znovu.`);
-          console.error('Chyba:', error); // Přidání detailního logování chyby
+          console.error('Chyba:', error);
         });
     }
 
