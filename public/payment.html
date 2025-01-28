@@ -135,7 +135,7 @@
         paymentMethod: method,
       };
 
-      // Nastavení URL pro API
+      // Nastavení URL API
       const apiUrl =
         window.location.hostname === 'localhost'
           ? 'http://localhost:3000/api/generate-pdf'
@@ -161,8 +161,8 @@
           }
         })
         .catch((error) => {
-          alert(`Došlo k chybě při odesílání objednávky: ${error.message}. Zkuste to prosím znovu.`);
-          console.error('Chyba:', error);
+          alert(`Došlo k chybě při odesílání objednávky: ${error.message}.`);
+          console.error('Chyba při platbě:', error);
         });
     }
 
