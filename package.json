@@ -1,0 +1,23 @@
+{
+  "name": "bit-fit-server",
+  "version": "1.0.0",
+  "description": "Bit-Fit Server - Backend aplikace pro generování PDF a odesílání emailů",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js", // Skript pro spuštění serveru
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["bit-fit", "backend", "express", "nodemailer", "pdfkit"],
+  "author": "Vaše Jméno",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.3",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "nodemailer": "^6.10.0",
+    "pdfkit": "^0.16.0"
+  },
+  "engines": {
+    "node": ">=14.x" // Verze Node.js požadovaná pro Heroku
+  }
+}

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Bit-Fit: Zdravý životní styl a profesionální jídelníčky. Objednejte si plán na míru a začněte svou proměnu ještě dnes!">
+  <title>Bit-Fit | Zdravý životní styl začíná zde</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+    header {
+      background-color: #f4c542;
+      padding: 20px 50px;
+      text-align: center;
+    }
+    header img {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      display: block;
+    }
+    nav {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+    nav a {
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+      font-size: 18px;
+      padding: 10px 20px;
+      border-radius: 5px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    nav a:hover {
+      background-color: #333;
+      color: #f4c542;
+    }
+    .hero {
+      text-align: center;
+      padding: 60px 20px;
+      background: linear-gradient(to bottom, #f4c542, #fff);
+    }
+    .hero h1 {
+      font-size: 3rem;
+      color: #333;
+      margin-bottom: 20px;
+      animation: fadeInDown 1s ease-out;
+    }
+    .hero p {
+      font-size: 1.2rem;
+      color: #555;
+      margin-bottom: 30px;
+      animation: fadeInUp 1s ease-out;
+    }
+    .hero button {
+      background-color: #333;
+      color: #f4c542;
+      border: none;
+      padding: 15px 30px;
+      font-size: 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+    .hero button:hover {
+      background-color: #555;
+      transform: scale(1.05);
+    }
+    .about {
+      padding: 50px 20px;
+      text-align: center;
+      background-color: white;
+    }
+    .about h2 {
+      color: #f4c542;
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+    .about p {
+      font-size: 1.1rem;
+      color: #555;
+      margin-bottom: 20px;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .testimonials {
+      padding: 50px 20px;
+      background-color: #f9f9f9;
+    }
+    .testimonials h2 {
+      text-align: center;
+      color: #f4c542;
+      margin-bottom: 30px;
+    }
+    .testimonial {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .testimonial p {
+      font-style: italic;
+    }
+    footer {
+      background-color: #333;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+    footer a {
+      color: #f4c542;
+      text-decoration: none;
+    }
+    footer a:hover {
+      text-decoration: underline;
+    }
+    .cookie-banner {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: #333;
+      color: white;
+      text-align: center;
+      padding: 10px;
+      z-index: 1000;
+    }
+    .cookie-banner button {
+      background-color: #f4c542;
+      color: #333;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      margin-left: 10px;
+      border-radius: 5px;
+    }
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="./bit_fit_logo.png" alt="Bit-Fit Logo">
+    <nav>
+      <a href="index.html">Domů</a>
+      <a href="formular.html">Vyplnit formulář</a>
+      <a href="#about">O nás</a>
+      <a href="pribehy.html">Vaše příběhy</a>
+      <a href="kontakt.html">Kontakt</a>
+    </nav>
+  </header>
+  <section class="hero">
+    <h1>Zdravý životní styl začíná zde</h1>
+    <p>Pomůžeme vám vytvořit jídelníček na míru a dosáhnout vašich cílů.</p>
+    <button onclick="location.href='formular.html'">Začněte hned</button>
+  </section>
+ <section class="about" id="about">
+    <h2>O nás</h2>
+    <p style="text-align: justify; text-justify: inter-word;">
+        Vítejte ve světě <strong>Bit-Fit</strong> – místo, kde zdravý životní styl začíná! Naší vášní je pomáhat lidem dosahovat jejich vysněných cílů – ať už jde o zhubnutí, nabírání svalů, nebo celkové zlepšení životního stylu. Věříme, že zdravé stravování nemusí být složité ani nudné. Naopak! Jídelníček může být chutný, pestrý a přitom dokonale přizpůsobený vašim potřebám.
+    </p>
+    <p style="text-align: justify; text-justify: inter-word;">
+        V <strong>Bit-Fit</strong> spojujeme nejnovější poznatky o výživě s osobním přístupem ke každému klientovi. Váš plán vytvoříme na míru – na základě vámi zadaných údajů, preferencí a cílů. Přitom nezapomínáme ani na jednoduchost a praktičnost. Chápeme, že váš čas je drahý, proto vše přizpůsobujeme tak, aby byla příprava jídla snadná a rychlá.
+    </p>
+    <h3>Jak to funguje?</h3>
+    <ul style="text-align: justify; max-width: 800px; margin: 20px auto; padding: 0; list-style: none;">
+        <li style="margin-bottom: 20px;">
+            <strong>1. Vyplňte jednoduchý dotazník:</strong> Stačí zadat vaše údaje, stravovací preference a cíle. Díky tomu získáme všechny potřebné informace, abychom mohli vytvořit plán přesně na míru.
+        </li>
+        <li style="margin-bottom: 20px;">
+            <strong>2. Zvolte si plán, který vám nejlépe vyhovuje:</strong> Nabízíme plány od jednodenních analýz až po kompletní měsíční jídelníčky. Vy rozhodujete, co potřebujete!
+        </li>
+        <li style="margin-bottom: 20px;">
+            <strong>3. Potvrďte objednávku a získejte svůj plán:</strong> Po dokončení objednávky zašleme váš osobní jídelníček včetně všech detailů na váš e-mail. Plán zahrnuje nejen jídelníček, ale i přehled makro a mikronutrientů, BMI a TDEE analýzu.
+        </li>
+        <li style="margin-bottom: 20px;">
+            <strong>4. Začněte svou cestu ke zdravému životnímu stylu:</strong> Sledujte svůj plán, užívejte si chutné pokrmy a sledujte, jak se vaše tělo mění.
+        </li>
+    </ul>
+    <p style="text-align: justify; text-justify: inter-word;">
+        💡 <strong>Tip:</strong> Pokud si nejste jistí, který plán je pro vás nejlepší, nebo máte další otázky, neváhejte nás kontaktovat prostřednictvím našeho formuláře v sekci <a href="kontakt.html">Kontakt</a>. Rádi vám poradíme!
+    </p>
+</section>
+
+
+    <footer>
+    <p>&copy; 2025 Bit-Fit. Všechna práva vyhrazena. | <a href="ochrana.html">Ochrana osobních údajů</a></p>
+    <div class="cookie-banner">
+      Tento web používá cookies pro zajištění správného fungování. <button onclick="this.parentElement.style.display='none';">Přijmout</button> <button onclick="this.parentElement.style.display='none';">Odmítnout</button>
+    </div>
+  </footer>
+</body>
+</html

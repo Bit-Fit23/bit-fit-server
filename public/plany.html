@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Výběr plánu - Bit-Fit</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f3f4f6;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    header {
+      background: linear-gradient(90deg, #f4c542, #e5b636);
+      padding: 20px;
+      text-align: center;
+      color: white;
+      font-size: 1.8rem;
+      font-weight: bold;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #f4c542;
+    }
+
+    .plan {
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+      background-color: #f9fafb;
+    }
+
+    .plan h2 {
+      font-size: 1.5rem;
+      color: #333;
+    }
+
+    .plan p {
+      margin: 10px 0;
+      text-align: justify; /* Zarovnání do bloku */
+    }
+
+    .plan button {
+      background-color: #f4c542;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 5px;
+      font-size: 1rem;
+      transition: background-color 0.3s ease;
+    }
+
+    .plan button:hover {
+      background-color: #e5b636;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 15px;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      .plan h2 {
+        font-size: 1.2rem;
+      }
+
+      .plan button {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    Výběr plánu - Bit-Fit
+  </header>
+  <div class="container">
+    <h1>Vyberte si svůj plán</h1>
+
+    <div class="plan" id="basic-plan">
+      <h2>Základní plán</h2>
+      <p>Chcete začít s malou změnou? Tento plán je ideální pro první krok ke zdravému životnímu stylu. Obsahuje vzorový jídelníček na 1 den. Součástí je detailní analýza vašeho BMI, TDEE a podrobný přehled makro a mikronutrientů, abyste lépe porozuměli svému tělu.</p>
+      <p>Cena: <strong>300 Kč</strong></p>
+      <label>
+        <input type="checkbox" id="basic-recipe" value="100"> Přidat recepty (+100 Kč)
+      </label>
+      <button onclick="selectPlan('Základní plán', 300, document.getElementById('basic-recipe').checked ? 100 : 0)">Vybrat</button>
+    </div>
+
+    <div class="plan" id="weekly-plan">
+      <h2>Týdenní plán</h2>
+      <p>Hledáte komplexní řešení na celý týden? Tento plán vám nabídne kompletní jídelníček na 7 dní, přizpůsobený vašim potřebám a cílům. Součástí je i podrobná analýza vašeho BMI, TDEE a doporučených živin, která vám pomůže pochopit, jak dosáhnout dlouhodobých výsledků.</p>
+      <p>Cena: <strong>900 Kč</strong></p>
+      <label>
+        <input type="checkbox" id="weekly-recipe" value="300"> Přidat recepty (+300 Kč)
+      </label>
+      <button onclick="selectPlan('Týdenní plán', 900, document.getElementById('weekly-recipe').checked ? 300 : 0)">Vybrat</button>
+    </div>
+
+    <div class="plan" id="monthly-plan">
+      <h2>Měsíční plán</h2>
+      <p>Chcete se do změny pustit naplno? Měsíční plán je určen těm, kteří chtějí dlouhodobé a udržitelné výsledky. Obsahuje detailní jídelníček na 30 dní, přizpůsobený vašim preferencím a cílům. V rámci plánu získáte i rozšířenou analýzu vašeho metabolismu a kalorických potřeb.</p>
+      <p>Cena: <strong>2 800 Kč</strong></p>
+      <label>
+        <input type="checkbox" id="monthly-recipe" value="800"> Přidat recepty (+800 Kč)
+      </label>
+      <button onclick="selectPlan('Měsíční plán', 2800, document.getElementById('monthly-recipe').checked ? 800 : 0)">Vybrat</button>
+    </div>
+
+    <div class="plan" id="quarterly-plan">
+      <h2>Tříměsíční plán</h2>
+      <p>Nejlepší volba pro ty, kteří chtějí změnu zakotvit natrvalo. Plán na 3 měsíce zahrnuje podrobnou analýzu vašeho těla a kompletní jídelníček na 90 dní. Součástí plánu je navíc <strong>konzultace zdarma</strong>, během které probereme vaše pokroky a upravíme plán dle vašich potřeb. Recepty jsou zahrnuty v ceně.</p>
+      <p>Cena: <strong>7 000 Kč</strong></p>
+      <button onclick="selectPlan('Tříměsíční plán', 7000, 0)">Vybrat</button>
+    </div>
+  </div>
+
+  <script>
+  function selectPlan(planName, planPrice, recipePrice) {
+    // Načtení dat z formuláře
+    const formData = JSON.parse(localStorage.getItem('formData'));
+
+    // Kontrola, zda data z formuláře existují
+    if (!formData || !formData.email) {
+      alert('Chybí data o klientovi. Vraťte se na stránku formuláře.');
+      window.location.href = 'formular.html';
+      return;
+    }
+
+    // Uložení dat o plánu do localStorage
+    localStorage.setItem('planName', planName);
+    localStorage.setItem('planPrice', planPrice);
+    localStorage.setItem('recipePrice', recipePrice);
+    localStorage.setItem('totalPrice', planPrice + recipePrice);
+
+    // Přesměrování na stránku platby
+    window.location.href = 'payment.html';
+  }
+  </script>
+
+</body>
+</html>
