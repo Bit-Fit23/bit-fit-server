@@ -12,14 +12,6 @@ const app = express();
 // ✅ Povolení CORS
 app.use(cors());
 
-// ✅ Přesměrování HTTP na HTTPS (pouze na Heroku)
-app.use((req, res, next) => {
-  if (process.env.NODE_ENV === 'production' && req.headers['x-forwarded-proto'] !== 'https') {
-    return res.redirect(`https://${req.headers.host}${req.url}`);
-  }
-  next();
-});
-
 // ✅ Zvýšení limitu pro velikost požadavků
 app.use(bodyParser.json({ limit: '10mb' }));
 app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
@@ -52,7 +44,7 @@ app.post('/api/generate-pdf', async (req, res) => {
     paymentMethod,
   } = req.body;
 
-  // Kontrola povinných polí
+  // ✅ Kontrola povinných polí
   const missingFields = [];
   if (!email) missingFields.push('email');
   if (!name) missingFields.push('name');
@@ -99,7 +91,7 @@ app.post('/api/generate-pdf', async (req, res) => {
 
     writeStream.on('finish', async () => {
       try {
-        // ✅ Ověření, že SMTP proměnné jsou nastaveny
+        // ✅ Ověření SMTP konfigurace
         if (!process.env.SMTP_HOST || !process.env.SMTP_USER || !process.env.SMTP_PASS) {
           console.error('❌ Chybí SMTP konfigurace!');
           return res.status(500).json({ success: false, error: 'Chybí SMTP konfigurace!' });
@@ -161,8 +153,8 @@ app.post('/api/generate-pdf', async (req, res) => {
   }
 });
 
-// ✅ Spuštění serveru
+// ✅ Spuštění serveru (naslouchání na všech IP)
 const PORT = process.env.PORT || 1337;
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Server běží na portu: ${PORT}`);
 });
