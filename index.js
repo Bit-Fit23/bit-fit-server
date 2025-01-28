@@ -9,6 +9,13 @@ require('dotenv').config(); // Načtení proměnných prostředí
 
 const app = express();
 
+// ✅ Logování SMTP konfigurace (pro ladění)
+console.log("✅ SMTP Nastavení:");
+console.log("SMTP_HOST:", process.env.SMTP_HOST);
+console.log("SMTP_PORT:", process.env.SMTP_PORT);
+console.log("SMTP_USER:", process.env.SMTP_USER);
+console.log("SMTP_PASS:", process.env.SMTP_PASS ? "✔ [skryto]" : "❌ CHYBÍ!");
+
 // ✅ Povolení CORS
 app.use(cors());
 
@@ -24,24 +31,14 @@ app.get('/', (req, res) => {
   res.send('✅ Server běží správně!');
 });
 
-// ✅ Route pro generování PDF
+// ✅ Route pro generování PDF a odesílání e-mailu
 app.post('/api/generate-pdf', async (req, res) => {
   console.log('📩 Přijatý požadavek:', req.body);
 
   const {
-    email,
-    name,
-    age,
-    gender,
-    height,
-    weight,
-    targetWeight,
-    dietHistory,
-    foodPreferences,
-    restrictions,
-    goals,
-    notes,
-    paymentMethod,
+    email, name, age, gender, height, weight,
+    targetWeight, dietHistory, foodPreferences,
+    restrictions, goals, notes, paymentMethod,
   } = req.body;
 
   // ✅ Kontrola povinných polí
