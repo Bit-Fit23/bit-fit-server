@@ -99,8 +99,8 @@ app.post('/api/generate-pdf', async (req, res) => {
     writeStream.on('finish', async () => {
       try {
         const transporter = nodemailer.createTransport({
-          host: 'wes1-smtp.wedos.net',
-          port: 587,
+          host: process.env.SMTP_HOST,
+          port: process.env.SMTP_PORT,
           secure: false,
           auth: {
             user: process.env.EMAIL_USER,
