@@ -73,7 +73,7 @@ app.post('/api/generate-pdf', async (req, res) => {
   const pdfPath = path.join(__dirname, `form_output_${Date.now()}.pdf`);
 
   try {
-    // Generování PDF
+    // ✅ Generování PDF
     const doc = new PDFDocument();
     const writeStream = fs.createWriteStream(pdfPath);
     doc.pipe(writeStream);
@@ -99,18 +99,24 @@ app.post('/api/generate-pdf', async (req, res) => {
 
     writeStream.on('finish', async () => {
       try {
-        // Nastavení Nodemailer transportu
+        // ✅ Ověření, že SMTP proměnné jsou nastaveny
+        if (!process.env.SMTP_HOST || !process.env.SMTP_USER || !process.env.SMTP_PASS) {
+          console.error('❌ Chybí SMTP konfigurace!');
+          return res.status(500).json({ success: false, error: 'Chybí SMTP konfigurace!' });
+        }
+
+        // ✅ Nastavení Nodemailer transportu
         const transporter = nodemailer.createTransport({
           host: process.env.SMTP_HOST,
-          port: parseInt(process.env.SMTP_PORT, 10),
-          secure: false,
+          port: parseInt(process.env.SMTP_PORT, 10) || 587,
+          secure: process.env.SMTP_PORT === '465', // True pokud používáte SSL
           auth: {
             user: process.env.SMTP_USER,
             pass: process.env.SMTP_PASS,
           },
         });
 
-        // Email administrátora
+        // ✅ Email administrátora
         const adminMailOptions = {
           from: process.env.SMTP_USER,
           to: process.env.SMTP_USER,
@@ -119,7 +125,7 @@ app.post('/api/generate-pdf', async (req, res) => {
           attachments: [{ filename: 'form_output.pdf', path: pdfPath }],
         };
 
-        // Email klienta
+        // ✅ Email klienta
         const clientMailOptions = {
           from: process.env.SMTP_USER,
           to: email,
@@ -127,7 +133,7 @@ app.post('/api/generate-pdf', async (req, res) => {
           text: `Dobrý den ${name},\n\nDěkujeme za vyplnění dotazníku. Náš tým začal pracovat na Vašem jídelníčku. Brzy Vás budeme kontaktovat s dalšími informacemi.\n\nS pozdravem,\nTým Bit-Fit`,
         };
 
-        // Odeslání e-mailů
+        // ✅ Odeslání e-mailů
         await Promise.all([
           transporter.sendMail(adminMailOptions),
           transporter.sendMail(clientMailOptions),
