@@ -9,6 +9,11 @@ require('dotenv').config(); // Načtení proměnných prostředí
 
 const app = express();
 
+// ✅ Funkce pro odstranění diakritiky
+const removeDiacritics = (text) => {
+  return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+};
+
 // ✅ Logování SMTP konfigurace (pro ladění)
 console.log("✅ SMTP Nastavení:");
 console.log("SMTP_HOST:", process.env.SMTP_HOST || "❌ NENÍ NASTAVENO");
@@ -67,23 +72,23 @@ app.post('/api/generate-pdf', async (req, res) => {
     const writeStream = fs.createWriteStream(pdfPath);
     doc.pipe(writeStream);
 
-    doc.fontSize(16).text('Bit-Fit: Osobní dotazník', { align: 'center' });
+    doc.fontSize(16).text(removeDiacritics('Bit-Fit: Osobni dotaznik'), { align: 'center' });
     doc.moveDown();
-    doc.fontSize(12).text(`Jméno: ${name}`);
-    doc.text(`E-mail: ${email}`);
-    doc.text(`Věk: ${age}`);
-    doc.text(`Pohlaví: ${gender}`);
-    doc.text(`Výška: ${height} cm`);
-    doc.text(`Váha: ${weight} kg`);
-    doc.text(`Cílová váha: ${targetWeight} kg`);
-    doc.text(`Historie diet: ${dietHistory || 'Neuvedeno'}`);
-    doc.text(`Oblíbené potraviny: ${foodPreferences || 'Neuvedeno'}`);
-    doc.text(`Neoblíbené potraviny: ${restrictions || 'Neuvedeno'}`);
-    doc.text(`Cíle: ${goals || 'Neuvedeno'}`);
-    doc.text(`Poznámky: ${notes || 'Neuvedeno'}`);
+    doc.fontSize(12).text(removeDiacritics(`Jmeno: ${name}`));
+    doc.text(removeDiacritics(`E-mail: ${email}`));
+    doc.text(removeDiacritics(`Vek: ${age}`));
+    doc.text(removeDiacritics(`Pohlavi: ${gender}`));
+    doc.text(removeDiacritics(`Vyska: ${height} cm`));
+    doc.text(removeDiacritics(`Vaha: ${weight} kg`));
+    doc.text(removeDiacritics(`Cilova vaha: ${targetWeight} kg`));
+    doc.text(removeDiacritics(`Historie diet: ${dietHistory || 'Neuvedeno'}`));
+    doc.text(removeDiacritics(`Oblibene potraviny: ${foodPreferences || 'Neuvedeno'}`));
+    doc.text(removeDiacritics(`Neoblibene potraviny: ${restrictions || 'Neuvedeno'}`));
+    doc.text(removeDiacritics(`Cile: ${goals || 'Neuvedeno'}`));
+    doc.text(removeDiacritics(`Poznamky: ${notes || 'Neuvedeno'}`));
     doc.moveDown();
-    doc.text(`Způsob platby: ${paymentMethod}`);
-    doc.text(`Status platby: Zaplaceno`);
+    doc.text(removeDiacritics(`Zpusob platby: ${paymentMethod}`));
+    doc.text(removeDiacritics(`Status platby: Zaplaceno`));
     doc.end();
 
     writeStream.on('finish', async () => {
@@ -119,7 +124,7 @@ app.post('/api/generate-pdf', async (req, res) => {
           from: process.env.SMTP_USER,
           to: email,
           subject: '✅ Potvrzení přijetí dotazníku - Bit-Fit',
-          text: `Dobrý den ${name},\n\nDěkujeme za vyplnění dotazníku. Náš tým začal pracovat na Vašem jídelníčku. Brzy Vás budeme kontaktovat s dalšími informacemi.\n\nS pozdravem,\nTým Bit-Fit`,
+          text: `Dobry den ${name},\n\nDekujeme za vyplneni dotazniku. Nas tym zacal pracovat na Vasem jidelnicku. Brzy Vas budeme kontaktovat s dalsimi informacemi.\n\nS pozdravem,\nTym Bit-Fit`,
         };
 
         // ✅ Odeslání e-mailů
