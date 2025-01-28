@@ -12,10 +12,10 @@ const app = express();
 // ✅ Povolení CORS
 app.use(cors());
 
-// ✅ Přesměrování HTTP na HTTPS
+// ✅ Přesměrování HTTP na HTTPS (pouze na Heroku)
 app.use((req, res, next) => {
-  if (req.headers['x-forwarded-proto'] !== 'https') {
-    return res.redirect('https://' + req.headers.host + req.url);
+  if (process.env.NODE_ENV === 'production' && req.headers['x-forwarded-proto'] !== 'https') {
+    return res.redirect(`https://${req.headers.host}${req.url}`);
   }
   next();
 });
@@ -24,7 +24,7 @@ app.use((req, res, next) => {
 app.use(bodyParser.json({ limit: '10mb' }));
 app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
 
-// ✅ Obsluha statických souborů (HTML, CSS, JS, obrázky atd.)
+// ✅ Obsluha statických souborů
 app.use(express.static(path.join(__dirname, 'public')));
 
 // ✅ Testovací route
@@ -73,6 +73,7 @@ app.post('/api/generate-pdf', async (req, res) => {
   const pdfPath = path.join(__dirname, `form_output_${Date.now()}.pdf`);
 
   try {
+    // Generování PDF
     const doc = new PDFDocument();
     const writeStream = fs.createWriteStream(pdfPath);
     doc.pipe(writeStream);
@@ -98,36 +99,35 @@ app.post('/api/generate-pdf', async (req, res) => {
 
     writeStream.on('finish', async () => {
       try {
+        // Nastavení Nodemailer transportu
         const transporter = nodemailer.createTransport({
           host: process.env.SMTP_HOST,
-          port: process.env.SMTP_PORT,
+          port: parseInt(process.env.SMTP_PORT, 10),
           secure: false,
           auth: {
-            user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASS,
+            user: process.env.SMTP_USER,
+            pass: process.env.SMTP_PASS,
           },
         });
 
+        // Email administrátora
         const adminMailOptions = {
-          from: process.env.EMAIL_USER,
-          to: process.env.EMAIL_USER,
+          from: process.env.SMTP_USER,
+          to: process.env.SMTP_USER,
           subject: 'Nový dotazník - Bit-Fit',
           text: '📎 V příloze naleznete nový vyplněný dotazník.',
           attachments: [{ filename: 'form_output.pdf', path: pdfPath }],
         };
 
+        // Email klienta
         const clientMailOptions = {
-          from: process.env.EMAIL_USER,
+          from: process.env.SMTP_USER,
           to: email,
           subject: '✅ Potvrzení přijetí dotazníku - Bit-Fit',
-          text: `Dobrý den ${name},
-
-Děkujeme za vyplnění dotazníku. Náš tým začal pracovat na Vašem jídelníčku. Brzy Vás budeme kontaktovat s dalšími informacemi.
-
-S pozdravem,
-Tým Bit-Fit`,
+          text: `Dobrý den ${name},\n\nDěkujeme za vyplnění dotazníku. Náš tým začal pracovat na Vašem jídelníčku. Brzy Vás budeme kontaktovat s dalšími informacemi.\n\nS pozdravem,\nTým Bit-Fit`,
         };
 
+        // Odeslání e-mailů
         await Promise.all([
           transporter.sendMail(adminMailOptions),
           transporter.sendMail(clientMailOptions),
@@ -155,7 +155,7 @@ Tým Bit-Fit`,
   }
 });
 
-// ✅ Spuštění serveru (opravený PORT pro Heroku)
+// ✅ Spuštění serveru
 const PORT = process.env.PORT || 1337;
 app.listen(PORT, () => {
   console.log(`🚀 Server běží na portu: ${PORT}`);
