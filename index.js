@@ -5,11 +5,20 @@ const PDFDocument = require('pdfkit');
 const fs = require('fs');
 const path = require('path');
 const cors = require('cors');
+require('dotenv').config(); // Načtení proměnných prostředí
 
 const app = express();
 
 // ✅ Povolení CORS
 app.use(cors());
+
+// ✅ Přesměrování HTTP na HTTPS
+app.use((req, res, next) => {
+  if (req.headers['x-forwarded-proto'] !== 'https') {
+    return res.redirect('https://' + req.headers.host + req.url);
+  }
+  next();
+});
 
 // ✅ Zvýšení limitu pro velikost požadavků
 app.use(bodyParser.json({ limit: '10mb' }));
@@ -84,7 +93,7 @@ app.post('/api/generate-pdf', async (req, res) => {
     doc.text(`Poznámky: ${notes || 'Neuvedeno'}`);
     doc.moveDown();
     doc.text(`Způsob platby: ${paymentMethod}`);
-    doc.text(`Status platby: Zaplaceno`); // Předpokládáme, že platba proběhla
+    doc.text(`Status platby: Zaplaceno`);
     doc.end();
 
     writeStream.on('finish', async () => {
@@ -94,21 +103,21 @@ app.post('/api/generate-pdf', async (req, res) => {
           port: 587,
           secure: false,
           auth: {
-            user: 'info@bit-fit.cz',
-            pass: 'Bitfit_007',
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS,
           },
         });
 
         const adminMailOptions = {
-          from: 'info@bit-fit.cz',
-          to: 'info@bit-fit.cz',
+          from: process.env.EMAIL_USER,
+          to: process.env.EMAIL_USER,
           subject: 'Nový dotazník - Bit-Fit',
           text: '📎 V příloze naleznete nový vyplněný dotazník.',
           attachments: [{ filename: 'form_output.pdf', path: pdfPath }],
         };
 
         const clientMailOptions = {
-          from: 'info@bit-fit.cz',
+          from: process.env.EMAIL_USER,
           to: email,
           subject: '✅ Potvrzení přijetí dotazníku - Bit-Fit',
           text: `Dobrý den ${name},
