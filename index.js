@@ -8,30 +8,24 @@ const cors = require('cors');
 
 const app = express();
 
-// Nastavení CORS
-app.use(
-  cors({
-    origin: '*', // Povolit všechny originy (pro testování); pro produkci nahraďte konkrétní doménou
-    methods: ['GET', 'POST', 'OPTIONS'], // Povolené HTTP metody
-    allowedHeaders: ['Content-Type'], // Povolené hlavičky
-  })
-);
+// ✅ Povolení CORS
+app.use(cors());
 
-// Zvýšení limitu velikosti požadavků
+// ✅ Zvýšení limitu pro velikost požadavků
 app.use(bodyParser.json({ limit: '10mb' }));
 app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
 
-// Obsluha statických souborů (HTML, CSS, JS, obrázky atd.)
+// ✅ Obsluha statických souborů (HTML, CSS, JS, obrázky atd.)
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Testovací route
+// ✅ Testovací route
 app.get('/', (req, res) => {
-  res.send('Server běží!');
+  res.send('✅ Server běží správně!');
 });
 
-// Route pro přijímání dat a generování PDF
+// ✅ Route pro generování PDF
 app.post('/api/generate-pdf', async (req, res) => {
-  console.log('Přijatý požadavek:', req.body);
+  console.log('📩 Přijatý požadavek:', req.body);
 
   const {
     email,
@@ -60,8 +54,8 @@ app.post('/api/generate-pdf', async (req, res) => {
   if (!paymentMethod) missingFields.push('paymentMethod');
 
   if (missingFields.length > 0) {
-    console.error('Chybí povinná pole:', missingFields.join(', '));
-    return res.status(400).send({
+    console.error('❌ Chybí povinná pole:', missingFields.join(', '));
+    return res.status(400).json({
       success: false,
       error: `Chybí povinná pole: ${missingFields.join(', ')}`,
     });
@@ -109,14 +103,14 @@ app.post('/api/generate-pdf', async (req, res) => {
           from: 'info@bit-fit.cz',
           to: 'info@bit-fit.cz',
           subject: 'Nový dotazník - Bit-Fit',
-          text: 'V příloze naleznete nový vyplněný dotazník.',
+          text: '📎 V příloze naleznete nový vyplněný dotazník.',
           attachments: [{ filename: 'form_output.pdf', path: pdfPath }],
         };
 
         const clientMailOptions = {
           from: 'info@bit-fit.cz',
           to: email,
-          subject: 'Potvrzení přijetí dotazníku - Bit-Fit',
+          subject: '✅ Potvrzení přijetí dotazníku - Bit-Fit',
           text: `Dobrý den ${name},
 
 Děkujeme za vyplnění dotazníku. Náš tým začal pracovat na Vašem jídelníčku. Brzy Vás budeme kontaktovat s dalšími informacemi.
@@ -130,30 +124,30 @@ Tým Bit-Fit`,
           transporter.sendMail(clientMailOptions),
         ]);
 
-        res.status(200).send({ success: true, message: 'PDF bylo úspěšně vygenerováno a e-maily byly odeslány.' });
+        res.status(200).json({ success: true, message: '📄 PDF bylo úspěšně vygenerováno a e-maily byly odeslány.' });
       } catch (emailError) {
-        console.error('Chyba při odesílání e-mailů:', emailError);
-        res.status(500).send({ success: false, error: 'Došlo k chybě při odesílání e-mailů.' });
+        console.error('❌ Chyba při odesílání e-mailů:', emailError);
+        res.status(500).json({ success: false, error: 'Došlo k chybě při odesílání e-mailů.' });
       } finally {
         fs.unlink(pdfPath, (err) => {
-          if (err) console.error('Chyba při mazání PDF:', err);
-          else console.log('PDF úspěšně odstraněno.');
+          if (err) console.error('⚠️ Chyba při mazání PDF:', err);
+          else console.log('✅ PDF úspěšně odstraněno.');
         });
       }
     });
 
     writeStream.on('error', (pdfError) => {
-      console.error('Chyba při generování PDF:', pdfError);
-      res.status(500).send({ success: false, error: 'Došlo k chybě při generování PDF.' });
+      console.error('❌ Chyba při generování PDF:', pdfError);
+      res.status(500).json({ success: false, error: 'Došlo k chybě při generování PDF.' });
     });
   } catch (error) {
-    console.error('Neočekávaná chyba:', error);
-    res.status(500).send({ success: false, error: 'Neočekávaná chyba při zpracování objednávky.' });
+    console.error('⚠️ Neočekávaná chyba:', error);
+    res.status(500).json({ success: false, error: 'Neočekávaná chyba při zpracování objednávky.' });
   }
 });
 
-// Spuštění serveru
-const PORT = process.env.PORT || 3000;
+// ✅ Spuštění serveru (opravený PORT pro Heroku)
+const PORT = process.env.PORT || 1337;
 app.listen(PORT, () => {
-  console.log(`Server běží na http://localhost:${PORT}`);
+  console.log(`🚀 Server běží na portu: ${PORT}`);
 });
