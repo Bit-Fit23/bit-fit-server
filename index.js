@@ -84,16 +84,26 @@ app.post('/api/generate-pdf', async (req, res) => {
     const writeStream = fs.createWriteStream(pdfPath);
     doc.pipe(writeStream);
 
-    doc.fontSize(16).text(removeDiacritics('Bit-Fit: Osobni dotaznik'), { align: 'center' });
+    doc.fontSize(16).text(removeDiacritics('Bit-Fit: Osobní dotazník'), { align: 'center' });
     doc.moveDown();
-    doc.fontSize(12).text(removeDiacritics(`Jmeno: ${name}`));
+    doc.fontSize(12).text(removeDiacritics(`Jméno: ${name}`));
     doc.text(removeDiacritics(`E-mail: ${email}`));
-    doc.text(removeDiacritics(`Vek: ${age}`));
-    doc.text(removeDiacritics(`Pohlavi: ${gender}`));
-    doc.text(removeDiacritics(`Vyska: ${height} cm`));
-    doc.text(removeDiacritics(`Vaha: ${weight} kg`));
-    doc.text(removeDiacritics(`Cilova vaha: ${targetWeight} kg`));
-    doc.text(removeDiacritics(`Zpusob platby: ${paymentMethod}`));
+    doc.text(removeDiacritics(`Věk: ${age}`));
+    doc.text(removeDiacritics(`Pohlaví: ${gender}`));
+    doc.text(removeDiacritics(`Výška: ${height} cm`));
+    doc.text(removeDiacritics(`Váha: ${weight} kg`));
+    doc.text(removeDiacritics(`Cílová váha: ${targetWeight} kg`));
+
+    // ✅ Přidání chybějících polí
+    doc.moveDown();
+    doc.text(removeDiacritics(`Historie diet: ${dietHistory || 'Neuvedeno'}`));
+    doc.text(removeDiacritics(`Oblíbené potraviny: ${foodPreferences || 'Neuvedeno'}`));
+    doc.text(removeDiacritics(`Neoblíbené potraviny: ${restrictions || 'Neuvedeno'}`));
+    doc.text(removeDiacritics(`Cíle: ${goals || 'Neuvedeno'}`));
+    doc.text(removeDiacritics(`Poznámky: ${notes || 'Neuvedeno'}`));
+
+    doc.moveDown();
+    doc.text(removeDiacritics(`Způsob platby: ${paymentMethod}`));
     doc.text(removeDiacritics(`Status platby: Zaplaceno`));
     doc.moveDown();
     doc.text(removeDiacritics(`Vybraný plán: ${planName}`));
