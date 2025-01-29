@@ -107,34 +107,51 @@
   </div>
 
   <script>
-    const formData = JSON.parse(localStorage.getItem('formData')) || null;
-    const planName = localStorage.getItem('planName') || null;
+    // 🛠️ Načtení dat z localStorage
+    const formData = JSON.parse(localStorage.getItem('formData')) || {};
+    const planName = localStorage.getItem('planName') || "Nezvoleno";
     const planPrice = parseInt(localStorage.getItem('planPrice')) || 0;
     const recipePrice = parseInt(localStorage.getItem('recipePrice')) || 0;
-    const totalPrice = planPrice + recipePrice;
+    const totalPrice = parseInt(localStorage.getItem('totalPrice')) || (planPrice + recipePrice);
+    const wantsRecipes = recipePrice > 0;
 
-    if (!formData || !formData.email || !planName || planPrice === 0) {
-      alert('Chybí data o plánu nebo klientovi. Vraťte se na stránku výběru plánů.');
+    // 🛠️ Kontrola, zda máme potřebná data
+    if (!formData.email || !planName || planPrice === 0) {
+      alert('❌ Chybí data o plánu nebo klientovi. Vraťte se na stránku výběru plánů.');
       window.location.href = 'plany.html';
     } else {
+      // 🛠️ Zobrazení údajů na stránce
       document.getElementById('selected-plan').textContent = planName;
       document.getElementById('plan-price').textContent = `${planPrice} Kč`;
-      document.getElementById('recipes').textContent =
-        planName === 'Tříměsíční plán' ? 'Ano' : recipePrice > 0 ? 'Ano' : 'Ne';
+      document.getElementById('recipes').textContent = wantsRecipes ? 'Ano' : 'Ne';
       document.getElementById('total-price').textContent = `${totalPrice} Kč`;
     }
 
+    // 🛠️ Funkce pro simulaci platby
     function simulatePayment(method) {
       const orderData = {
-        ...formData,
-        planName,
-        planPrice,
-        recipePrice,
-        totalPrice,
+        email: formData.email,
+        name: formData.name,
+        age: formData.age,
+        gender: formData.gender,
+        height: formData.height,
+        weight: formData.weight,
+        targetWeight: formData.targetWeight,
+        dietHistory: formData.dietHistory,
+        foodPreferences: formData.foodPreferences,
+        restrictions: formData.restrictions,
+        goals: formData.goals,
+        notes: formData.notes,
         paymentMethod: method,
+        planName: planName,
+        planPrice: planPrice,
+        recipePrice: recipePrice,
+        totalPrice: totalPrice,
+        wantsRecipes: wantsRecipes
       };
 
-      // Nastavení URL API
+      console.log("📩 Odesílám objednávku:", orderData);
+
       const apiUrl =
         window.location.hostname === 'localhost'
           ? 'http://localhost:3000/api/generate-pdf'
@@ -147,26 +164,28 @@
       })
         .then((response) => {
           if (!response.ok) {
-            throw new Error(`Chyba serveru: ${response.status}`);
+            throw new Error(`❌ Chyba serveru: ${response.status}`);
           }
           return response.json();
         })
         .then((data) => {
           if (data.success) {
+            console.log("✅ Platba úspěšně zpracována.");
             document.getElementById('email-confirmation').style.display = 'block';
             document.querySelector('.payment-methods').style.display = 'none';
           } else {
-            throw new Error(data.error || 'Došlo k chybě při zpracování objednávky.');
+            throw new Error(data.error || '❌ Došlo k chybě při zpracování objednávky.');
           }
         })
         .catch((error) => {
-          alert(`Došlo k chybě při odesílání objednávky: ${error.message}.`);
-          console.error('Chyba při platbě:', error);
+          alert(`❌ Chyba při odesílání objednávky: ${error.message}.`);
+          console.error('❌ Chyba při platbě:', error);
         });
     }
 
+    // 🛠️ Funkce pro návrat na domovskou stránku
     function returnToHome() {
-      alert('Děkujeme za vaši objednávku!');
+      alert('✅ Děkujeme za vaši objednávku!');
       window.location.href = 'index.html';
     }
   </script>
