@@ -44,9 +44,9 @@ app.post('/api/generate-pdf', async (req, res) => {
     email, name, age, gender, height, weight,
     targetWeight, dietHistory, foodPreferences,
     restrictions, goals, notes, paymentMethod,
-    selectedPlan, // ➕ Nově: vybraný plán klienta
-    wantsRecipes, // ➕ Nově: požadavek na recepty (true/false)
-    paymentAmount // ➕ Nově: výše zaúčtované platby
+    selectedPlan, // ✅ Přidáno - vybraný plán
+    wantsRecipes, // ✅ Přidáno - požadavek na recepty
+    paymentAmount // ✅ Přidáno - celková částka
   } = req.body;
 
   // ✅ Kontrola povinných polí
@@ -93,7 +93,6 @@ app.post('/api/generate-pdf', async (req, res) => {
     doc.text(removeDiacritics(`Zpusob platby: ${paymentMethod}`));
     doc.text(removeDiacritics(`Status platby: Zaplaceno`));
     doc.moveDown(); // Přidá mezeru
-    // ➕ Nové informace do PDF:
     doc.text(removeDiacritics(`Vybraný plán: ${selectedPlan}`));
     doc.text(removeDiacritics(`Požaduje recepty: ${wantsRecipes ? 'Ano' : 'Ne'}`));
     doc.text(removeDiacritics(`Výše zaúčtované platby: ${paymentAmount} Kč`));

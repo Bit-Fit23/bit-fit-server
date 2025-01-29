@@ -150,7 +150,10 @@
     localStorage.setItem('planName', planName);
     localStorage.setItem('planPrice', planPrice);
     localStorage.setItem('recipePrice', recipePrice);
-    localStorage.setItem('totalPrice', planPrice + recipePrice);
+    localStorage.setItem('totalPrice', planPrice + recipePrice);    
+    localStorage.setItem('selectedPlan', planName);
+    localStorage.setItem('wantsRecipes', recipePrice > 0);
+    localStorage.setItem('paymentAmount', planPrice + recipePrice);
 
     // Přesměrování na stránku platby
     window.location.href = 'payment.html';
