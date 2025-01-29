@@ -39,6 +39,7 @@ app.get('/', (req, res) => {
 // ✅ Route pro generování PDF a odesílání e-mailu
 app.post('/api/generate-pdf', async (req, res) => {
   console.log('📩 Přijatý požadavek:', req.body);
+  console.log("🔍 CELÝ POŽADAVEK:", JSON.stringify(req.body, null, 2));
 
   const {
     email, name, age, gender, height, weight,
