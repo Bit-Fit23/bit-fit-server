@@ -44,9 +44,9 @@ app.post('/api/generate-pdf', async (req, res) => {
     email, name, age, gender, height, weight,
     targetWeight, dietHistory, foodPreferences,
     restrictions, goals, notes, paymentMethod,
-    planName = "Nezvoleno", 
-    planPrice = 0, 
-    recipePrice = 0, 
+    planName = "Nezvoleno",
+    planPrice = 0,
+    recipePrice = 0,
     totalPrice = 0
   } = req.body;
 
@@ -93,12 +93,6 @@ app.post('/api/generate-pdf', async (req, res) => {
     doc.text(removeDiacritics(`Vyska: ${height} cm`));
     doc.text(removeDiacritics(`Vaha: ${weight} kg`));
     doc.text(removeDiacritics(`Cilova vaha: ${targetWeight} kg`));
-    doc.text(removeDiacritics(`Historie diet: ${dietHistory || 'Neuvedeno'}`));
-    doc.text(removeDiacritics(`Oblibene potraviny: ${foodPreferences || 'Neuvedeno'}`));
-    doc.text(removeDiacritics(`Neoblibene potraviny: ${restrictions || 'Neuvedeno'}`));
-    doc.text(removeDiacritics(`Cile: ${goals || 'Neuvedeno'}`));
-    doc.text(removeDiacritics(`Poznamky: ${notes || 'Neuvedeno'}`));
-    doc.moveDown();
     doc.text(removeDiacritics(`Zpusob platby: ${paymentMethod}`));
     doc.text(removeDiacritics(`Status platby: Zaplaceno`));
     doc.moveDown();
@@ -111,43 +105,43 @@ app.post('/api/generate-pdf', async (req, res) => {
 
     writeStream.on('finish', async () => {
       try {
-        // ✅ Nastavení Nodemailer transportu
+        // ✅ Ověření SMTP před odesláním
+        if (!process.env.SMTP_HOST || !process.env.SMTP_USER || !process.env.SMTP_PASS) {
+          throw new Error("❌ Chybí SMTP konfigurace!");
+        }
+
         const transporter = nodemailer.createTransport({
           host: process.env.SMTP_HOST,
           port: parseInt(process.env.SMTP_PORT, 10) || 587,
-          secure: parseInt(process.env.SMTP_PORT, 10) === 465, 
+          secure: parseInt(process.env.SMTP_PORT, 10) === 465,
           auth: {
             user: process.env.SMTP_USER,
             pass: process.env.SMTP_PASS,
           },
         });
 
-        // ✅ Email administrátora
-        const adminMailOptions = {
+        console.log("📩 Odesílám e-mail administrátorovi...");
+        await transporter.sendMail({
           from: process.env.SMTP_USER,
           to: process.env.SMTP_USER,
           subject: 'Nový dotazník - Bit-Fit',
           text: '📎 V příloze naleznete nový vyplněný dotazník.',
           attachments: [{ filename: 'form_output.pdf', path: pdfPath }],
-        };
+        });
 
-        // ✅ Email klienta
-        const clientMailOptions = {
+        console.log("📩 Odesílám e-mail klientovi...");
+        await transporter.sendMail({
           from: process.env.SMTP_USER,
           to: email,
           subject: '✅ Potvrzení přijetí dotazníku - Bit-Fit',
-          text: `Dobry den ${name},\n\nDekujeme za vyplneni dotazniku. Nas tym zacal pracovat na Vasem jidelnicku. Brzy Vas budeme kontaktovat s dalsimi informacemi.\n\nS pozdravem,\nTym Bit-Fit`,
-        };
+          text: `Dobry den ${name},\n\nDekujeme za vyplneni dotazniku. Nas tym zacal pracovat na Vasem jidelnicku. Brzy Vas budeme kontaktovat.\n\nS pozdravem,\nTym Bit-Fit`,
+        });
 
-        // ✅ Odeslání e-mailů
-        await Promise.all([
-          transporter.sendMail(adminMailOptions),
-          transporter.sendMail(clientMailOptions),
-        ]);
-
+        console.log("✅ E-maily úspěšně odeslány.");
         res.status(200).json({ success: true, message: '📄 PDF bylo úspěšně vygenerováno a e-maily byly odeslány.' });
 
-        fs.unlink(pdfPath, () => console.log('✅ PDF odstraněno.'));
+        fs.unlinkSync(pdfPath);
+        console.log('✅ PDF odstraněno.');
       } catch (emailError) {
         console.error('❌ Chyba při odesílání e-mailů:', emailError);
         res.status(500).json({ success: false, error: 'Chyba při odesílání e-mailů.' });
@@ -159,8 +153,4 @@ app.post('/api/generate-pdf', async (req, res) => {
   }
 });
 
-// ✅ Spuštění serveru
-const PORT = process.env.PORT || 1337;
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`🚀 Server běží na portu: ${PORT}`);
-});
+app.listen(process.env.PORT || 1337, () => console.log("🚀 Server běží!"));
