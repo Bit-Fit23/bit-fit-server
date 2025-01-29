@@ -17,7 +17,6 @@
       min-height: 100vh;
       color: #333;
     }
-
     .container {
       background-color: white;
       padding: 30px;
@@ -27,25 +26,20 @@
       width: 100%;
       text-align: center;
     }
-
     h1 {
       color: #f4c542;
       margin-bottom: 20px;
     }
-
     .summary {
       text-align: left;
       margin-bottom: 20px;
     }
-
     .summary p {
       margin: 5px 0;
     }
-
     .payment-methods {
       margin-top: 20px;
     }
-
     .payment-methods button {
       background-color: #f4c542;
       color: white;
@@ -56,26 +50,21 @@
       font-size: 1rem;
       margin: 10px;
     }
-
     .payment-methods button:hover {
       background-color: #e5b636;
     }
-
     .email-confirmation {
       text-align: left;
       margin-top: 20px;
       display: none;
     }
-
     @media (max-width: 768px) {
       .container {
         padding: 20px;
       }
-
       h1 {
         font-size: 1.5rem;
       }
-
       .payment-methods button {
         font-size: 0.9rem;
         padding: 8px 16px;
@@ -112,11 +101,11 @@
     const planName = localStorage.getItem('planName') || "Nezvoleno";
     const planPrice = parseInt(localStorage.getItem('planPrice')) || 0;
     const recipePrice = parseInt(localStorage.getItem('recipePrice')) || 0;
-    const totalPrice = parseInt(localStorage.getItem('totalPrice')) || (planPrice + recipePrice);
+    const totalPrice = planPrice + recipePrice;
     const wantsRecipes = recipePrice > 0;
 
-    // 🛠️ Kontrola, zda máme potřebná data
-    if (!formData.email || !planName || planPrice === 0) {
+    // 🛠️ Kontrola, zda máme všechna potřebná data
+    if (!formData.email || !formData.name || !formData.age || planPrice === 0) {
       alert('❌ Chybí data o plánu nebo klientovi. Vraťte se na stránku výběru plánů.');
       window.location.href = 'plany.html';
     } else {
@@ -130,27 +119,16 @@
     // 🛠️ Funkce pro simulaci platby
     function simulatePayment(method) {
       const orderData = {
-        email: formData.email,
-        name: formData.name,
-        age: formData.age,
-        gender: formData.gender,
-        height: formData.height,
-        weight: formData.weight,
-        targetWeight: formData.targetWeight,
-        dietHistory: formData.dietHistory,
-        foodPreferences: formData.foodPreferences,
-        restrictions: formData.restrictions,
-        goals: formData.goals,
-        notes: formData.notes,
-        paymentMethod: method,
-        planName: planName,
-        planPrice: planPrice,
-        recipePrice: recipePrice,
-        totalPrice: totalPrice,
-        wantsRecipes: wantsRecipes
+        ...formData, // Odesíláme kompletní údaje klienta
+        planName,
+        planPrice,
+        recipePrice,
+        totalPrice,
+        wantsRecipes,
+        paymentMethod: method
       };
 
-      console.log("📩 Odesílám objednávku:", orderData);
+      console.log("📩 Odesílám objednávku na backend:", orderData);
 
       const apiUrl =
         window.location.hostname === 'localhost'
