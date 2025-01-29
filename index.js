@@ -40,7 +40,10 @@ app.get('/', (req, res) => {
 app.post('/api/generate-pdf', async (req, res) => {
   console.log('📩 Přijatý požadavek:', req.body);
   console.log("🔍 CELÝ POŽADAVEK:", JSON.stringify(req.body, null, 2));
-
+  console.log("🔍 Debug: planName =", req.body.planName);
+  console.log("🔍 Debug: planPrice =", req.body.planPrice);
+  console.log("🔍 Debug: recipePrice =", req.body.recipePrice);
+  console.log("🔍 Debug: totalPrice =", req.body.totalPrice);
   const {
     email, name, age, gender, height, weight,
     targetWeight, dietHistory, foodPreferences,
