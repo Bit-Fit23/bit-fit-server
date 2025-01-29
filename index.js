@@ -50,9 +50,14 @@ app.post('/api/generate-pdf', async (req, res) => {
   } = req.body;
 
   // Přemapování názvů, aby odpovídaly tomu, co očekává backend:
-  const selectedPlan = planName; 
+  const selectedPlan = planName || "Nezvoleno"; 
   const wantsRecipes = recipePrice > 0; 
-  const paymentAmount = totalPrice;
+  const paymentAmount = totalPrice || 0;
+
+  // ✅ Debugovací výpis pro ověření, zda data dorazila správně
+  console.log("🔍 Vybraný plán:", selectedPlan);
+  console.log("🔍 Požaduje recepty:", wantsRecipes);
+  console.log("🔍 Výše zaúčtované platby:", paymentAmount);
 
   // ✅ Kontrola povinných polí
   const missingFields = [];
