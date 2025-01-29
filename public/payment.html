@@ -79,7 +79,7 @@
     <div class="summary">
       <p><strong>Zvolený plán:</strong> <span id="selected-plan">N/A</span></p>
       <p><strong>Cena:</strong> <span id="plan-price">0 Kč</span></p>
-      <p><strong>Recepty:</strong> <span id="recipes">Ne</span></p>
+      <p id="recipe-row"><strong>Recepty:</strong> <span id="recipes">Ne</span></p>
       <p><strong>Celková cena:</strong> <span id="total-price">0 Kč</span></p>
     </div>
 
@@ -120,7 +120,11 @@
       // 🛠️ Zobrazení údajů na stránce
       document.getElementById('selected-plan').textContent = planName;
       document.getElementById('plan-price').textContent = `${planPrice} Kč`;
+      if (planName === 'Tříměsíční plán') {
+      document.getElementById('recipe-row').style.display = 'none';
+      } else {
       document.getElementById('recipes').textContent = wantsRecipes ? 'Ano' : 'Ne';
+      }
       document.getElementById('total-price').textContent = `${totalPrice} Kč`;
     }
 
