@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="cs">
 <head>
@@ -104,6 +105,13 @@
     const totalPrice = planPrice + recipePrice;
     const wantsRecipes = recipePrice > 0;
 
+    // Zajištění, že všechna data jsou dostupná
+    formData.dietHistory = formData.dietHistory || "Neuvedeno";
+    formData.foodPreferences = formData.foodPreferences || "Neuvedeno";
+    formData.restrictions = formData.restrictions || "Neuvedeno";
+    formData.goals = formData.goals || "Neuvedeno";
+    formData.notes = formData.notes || "Neuvedeno";
+
     // 🛠️ Kontrola, zda máme všechna potřebná data
     if (!formData.email || !formData.name || !formData.age || planPrice === 0) {
       alert('❌ Chybí data o plánu nebo klientovi. Vraťte se na stránku výběru plánů.');
@@ -119,23 +127,34 @@
     // 🛠️ Funkce pro simulaci platby
     function simulatePayment(method) {
       const orderData = {
-        ...formData, // Odesíláme kompletní údaje klienta
-        planName,
-        planPrice,
-        recipePrice,
-        totalPrice,
-        wantsRecipes,
-        paymentMethod: method
+        email: formData.email,
+        name: formData.name,
+        age: formData.age,
+        gender: formData.gender,
+        height: formData.height,
+        weight: formData.weight,
+        targetWeight: formData.targetWeight,
+        dietHistory: formData.dietHistory,
+        foodPreferences: formData.foodPreferences,
+        restrictions: formData.restrictions,
+        goals: formData.goals,
+        notes: formData.notes,
+        paymentMethod: method,
+        planName: planName,
+        planPrice: planPrice,
+        recipePrice: recipePrice,
+        totalPrice: totalPrice,
+        wantsRecipes: wantsRecipes
       };
 
-      console.log("📩 Odesílám objednávku na backend:", orderData);
+      console.log("📩 Odesílám objednávku na backend:", JSON.stringify(orderData, null, 2));
 
       const apiUrl =
         window.location.hostname === 'localhost'
           ? 'http://localhost:3000/api/generate-pdf'
           : 'https://bit-fit-server-e57aec3208e1.herokuapp.com/api/generate-pdf';
 
-      fetch(apiUrl, {
+    fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(orderData),
