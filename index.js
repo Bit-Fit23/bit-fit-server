@@ -14,7 +14,7 @@ const removeDiacritics = (text) => {
   return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 };
 
-// ✅ Logování SMTP konfigurace (pro ladění)
+// ✅ Logování SMTP konfigurace
 console.log("✅ SMTP Nastavení:");
 console.log("SMTP_HOST:", process.env.SMTP_HOST || "❌ NENÍ NASTAVENO");
 console.log("SMTP_PORT:", process.env.SMTP_PORT || "❌ NENÍ NASTAVENO");
@@ -39,29 +39,24 @@ app.get('/', (req, res) => {
 // ✅ Route pro generování PDF a odesílání e-mailu
 app.post('/api/generate-pdf', async (req, res) => {
   console.log('📩 Přijatý požadavek:', req.body);
-  console.log("🔍 CELÝ POŽADAVEK:", JSON.stringify(req.body, null, 2));
-  console.log("🔍 Debug: planName =", req.body.planName);
-  console.log("🔍 Debug: planPrice =", req.body.planPrice);
-  console.log("🔍 Debug: recipePrice =", req.body.recipePrice);
-  console.log("🔍 Debug: totalPrice =", req.body.totalPrice);
+
   const {
     email, name, age, gender, height, weight,
     targetWeight, dietHistory, foodPreferences,
     restrictions, goals, notes, paymentMethod,
-    planName,  // 👉 frontend posílá `planName`, backend očekával `selectedPlan`
-    recipePrice, // 👉 frontend posílá `recipePrice`, backend očekával `wantsRecipes`
-    totalPrice  // 👉 frontend posílá `totalPrice`, backend očekával `paymentAmount`
+    planName = "Nezvoleno", 
+    planPrice = 0, 
+    recipePrice = 0, 
+    totalPrice = 0
   } = req.body;
 
-  // Přemapování názvů, aby odpovídaly tomu, co očekává backend:
-  const selectedPlan = planName || "Nezvoleno"; 
-  const wantsRecipes = recipePrice > 0; 
-  const paymentAmount = totalPrice || 0;
+  const wantsRecipes = recipePrice > 0;
 
-  // ✅ Debugovací výpis pro ověření, zda data dorazila správně
-  console.log("🔍 Vybraný plán:", selectedPlan);
+  console.log("🔍 Vybraný plán:", planName);
+  console.log("🔍 Cena plánu:", planPrice);
   console.log("🔍 Požaduje recepty:", wantsRecipes);
-  console.log("🔍 Výše zaúčtované platby:", paymentAmount);
+  console.log("🔍 Cena za recepty:", recipePrice);
+  console.log("🔍 Celková cena:", totalPrice);
 
   // ✅ Kontrola povinných polí
   const missingFields = [];
@@ -106,25 +101,21 @@ app.post('/api/generate-pdf', async (req, res) => {
     doc.moveDown();
     doc.text(removeDiacritics(`Zpusob platby: ${paymentMethod}`));
     doc.text(removeDiacritics(`Status platby: Zaplaceno`));
-    doc.moveDown(); // Přidá mezeru
-    doc.text(removeDiacritics(`Vybraný plán: ${selectedPlan}`));
+    doc.moveDown();
+    doc.text(removeDiacritics(`Vybraný plán: ${planName}`));
+    doc.text(removeDiacritics(`Cena plánu: ${planPrice} Kč`));
     doc.text(removeDiacritics(`Požaduje recepty: ${wantsRecipes ? 'Ano' : 'Ne'}`));
-    doc.text(removeDiacritics(`Výše zaúčtované platby: ${paymentAmount} Kč`));
+    doc.text(removeDiacritics(`Cena za recepty: ${recipePrice} Kč`));
+    doc.text(removeDiacritics(`Celková cena: ${totalPrice} Kč`));
     doc.end();
 
     writeStream.on('finish', async () => {
       try {
-        // ✅ Ověření SMTP konfigurace
-        if (!process.env.SMTP_HOST || !process.env.SMTP_USER || !process.env.SMTP_PASS) {
-          console.error('❌ Chybí SMTP konfigurace!');
-          return res.status(500).json({ success: false, error: 'Chybí SMTP konfigurace!' });
-        }
-
         // ✅ Nastavení Nodemailer transportu
         const transporter = nodemailer.createTransport({
           host: process.env.SMTP_HOST,
           port: parseInt(process.env.SMTP_PORT, 10) || 587,
-          secure: parseInt(process.env.SMTP_PORT, 10) === 465, // True pokud používáte SSL
+          secure: parseInt(process.env.SMTP_PORT, 10) === 465, 
           auth: {
             user: process.env.SMTP_USER,
             pass: process.env.SMTP_PASS,
@@ -155,20 +146,12 @@ app.post('/api/generate-pdf', async (req, res) => {
         ]);
 
         res.status(200).json({ success: true, message: '📄 PDF bylo úspěšně vygenerováno a e-maily byly odeslány.' });
+
+        fs.unlink(pdfPath, () => console.log('✅ PDF odstraněno.'));
       } catch (emailError) {
         console.error('❌ Chyba při odesílání e-mailů:', emailError);
-        res.status(500).json({ success: false, error: 'Došlo k chybě při odesílání e-mailů.' });
-      } finally {
-        fs.unlink(pdfPath, (err) => {
-          if (err) console.error('⚠️ Chyba při mazání PDF:', err);
-          else console.log('✅ PDF úspěšně odstraněno.');
-        });
+        res.status(500).json({ success: false, error: 'Chyba při odesílání e-mailů.' });
       }
-    });
-
-    writeStream.on('error', (pdfError) => {
-      console.error('❌ Chyba při generování PDF:', pdfError);
-      res.status(500).json({ success: false, error: 'Došlo k chybě při generování PDF.' });
     });
   } catch (error) {
     console.error('⚠️ Neočekávaná chyba:', error);
