@@ -44,10 +44,15 @@ app.post('/api/generate-pdf', async (req, res) => {
     email, name, age, gender, height, weight,
     targetWeight, dietHistory, foodPreferences,
     restrictions, goals, notes, paymentMethod,
-    selectedPlan, // ✅ Přidáno - vybraný plán
-    wantsRecipes, // ✅ Přidáno - požadavek na recepty
-    paymentAmount // ✅ Přidáno - celková částka
+    planName,  // 👉 frontend posílá `planName`, backend očekával `selectedPlan`
+    recipePrice, // 👉 frontend posílá `recipePrice`, backend očekával `wantsRecipes`
+    totalPrice  // 👉 frontend posílá `totalPrice`, backend očekával `paymentAmount`
   } = req.body;
+
+  // Přemapování názvů, aby odpovídaly tomu, co očekává backend:
+  const selectedPlan = planName; 
+  const wantsRecipes = recipePrice > 0; 
+  const paymentAmount = totalPrice;
 
   // ✅ Kontrola povinných polí
   const missingFields = [];
