@@ -88,7 +88,21 @@
       <button onclick="simulatePayment('Bitcoin')">Bitcoin</button>
       <button onclick="simulatePayment('Bankovní účet')">Bankovní účet</button>
     </div>
-
+    
+    <div class="btc-payment" id="btc-payment" style="display: none; text-align: left; margin-top: 20px;">
+      <h3>Platba Bitcoinem</h3>
+      <p>Vyberte si způsob platby a naskenujte odpovídající QR kód:</p>
+    
+      <h4>⚡ Lightning Network</h4>
+      <img src="public/qr_ln.png" alt="Lightning QR kód" width="200">
+          
+      <h4>🔗 On-chain platba</h4>
+      <img src="public/qr_onchain.png" alt="On-chain QR kód" width="200">
+          
+      <p><strong>Poznámka:</strong> Při platbě prosím uveďte svůj e-mail do poznámky, abychom mohli platbu správně přiřadit.</p>
+      <button onclick="confirmBTCPayment()">Provedl jsem platbu</button>
+    </div>
+    
     <div class="bank-details" id="bank-details" style="display: none; text-align: left; margin-top: 20px;">
       <h3>Platba na bankovní účet</h3>
       <p><strong>Číslo účtu:</strong> 223879569/0300</p>
@@ -167,6 +181,11 @@
         document.getElementById('email-confirmation').style.display = 'none';
         document.querySelector('.payment-methods').style.display = 'none'; // Skryje platební metody ihned
       }
+      if (method === 'Bitcoin') {
+        document.getElementById('btc-payment').style.display = 'block';
+        document.getElementById('email-confirmation').style.display = 'none';
+        document.querySelector('.payment-methods').style.display = 'none';
+      }
       if (method === 'Platba kartou') {
         alert('❌ Platební brána není momentálně dostupná. Použijte bankovní účet nebo Bitcoin.');
         return;
@@ -210,6 +229,12 @@
       setTimeout(returnToHome, 5000); // Po 5 sekundách přesměrování na domovskou stránku
     }
 
+    function confirmBTCPayment() {
+      alert('Děkujeme! Platba bude ověřena.');
+      document.getElementById('btc-payment').style.display = 'none';
+      document.getElementById('email-confirmation').style.display = 'block';
+      sendBTCPaymentEmail();
+    }
 
 function sendPaymentEmail() {
   if (!formData.email || !formData.name) {
@@ -238,6 +263,31 @@ function sendPaymentEmail() {
   }).catch(error => console.error('❌ Chyba:', error));
 }
 
+function sendBTCPaymentEmail() {
+  if (!formData.email || !formData.name) {
+    console.error('❌ Chybí data o klientovi: ', formData);
+    alert('Chyba: Nemáme dostatek údajů pro odeslání potvrzení platby.');
+    return;
+  }
+
+  const emailData = {
+    email: 'info@bit-fit.cz',
+    subject: 'Nová Bitcoin platba',
+    message: `Klient ${formData.name} (${formData.email}) oznámil, že provedl platbu Bitcoinem. Prosím, ověřte příchozí platbu.`,
+  };
+
+  fetch('/api/send-email', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(emailData),
+  }).then(response => {
+    if (response.ok) {
+      console.log('✅ Email úspěšně odeslán.');
+    } else {
+      console.error('❌ Chyba při odesílání emailu.');
+    }
+  }).catch(error => console.error('❌ Chyba:', error));
+}
 
     // 🛠️ Funkce pro návrat na domovskou stránku
     function returnToHome() {
