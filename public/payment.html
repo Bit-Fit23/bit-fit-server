@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="cs">
 <head>
@@ -85,16 +84,26 @@
 
     <h2>Zvolte způsob platby</h2>
     <div class="payment-methods">
-      <button onclick="simulatePayment('Platba kartou')">Platba kartou</button>
+      <button onclick="simulatePayment('Platba kartou')">Platba kartou (nedostupné)</button>
       <button onclick="simulatePayment('Bitcoin')">Bitcoin</button>
+      <button onclick="simulatePayment('Bankovní účet')">Bankovní účet</button>
     </div>
 
-    <div class="email-confirmation" id="email-confirmation">
+    <div class="bank-details" id="bank-details" style="display: none; text-align: left; margin-top: 20px;">
+      <h3>Platba na bankovní účet</h3>
+      <p><strong>Číslo účtu:</strong> 223879569/0300</p>
+      <p><strong>Variabilní symbol:</strong> 2025001</p>
+      <p><strong>QR kód pro platbu:</strong></p>
+      <img src="qr_code.png" alt="QR kód" width="200">
+      <p><strong>Poznámka:</strong> Nezapomeňte do poznámky k platbě uvést svůj e-mail!</p>
+      <button onclick="confirmBankPayment()">Provedl jsem platbu</button>
+    </div>
+  
+    <div class="email-confirmation" id="email-confirmation" style="display: none;">
       <h3>Potvrzení platby</h3>
-      <p>Platba byla úspěšně přijata.</p>
+      <p>Děkujeme! Vaše platba byla zaznamenána a čeká na ověření.</p>
       <button onclick="returnToHome()">Zpět na domovskou stránku</button>
     </div>
-  </div>
 
   <script>
     // 🛠️ Načtení dat z localStorage
@@ -121,9 +130,9 @@
       document.getElementById('selected-plan').textContent = planName;
       document.getElementById('plan-price').textContent = `${planPrice} Kč`;
       if (planName === 'Tříměsíční plán') {
-      document.getElementById('recipe-row').style.display = 'none';
+        document.getElementById('recipe-row').style.display = 'none';
       } else {
-      document.getElementById('recipes').textContent = wantsRecipes ? 'Ano' : 'Ne';
+        document.getElementById('recipes').textContent = wantsRecipes ? 'Ano' : 'Ne';
       }
       document.getElementById('total-price').textContent = `${totalPrice} Kč`;
     }
@@ -152,13 +161,23 @@
       };
 
       console.log("📩 Odesílám objednávku na backend:", JSON.stringify(orderData, null, 2));
-
+      if (method === 'Bankovní účet') {
+        document.getElementById('bank-details').style.display = 'block';
+        // Ujistíme se, že potvrzení platby zůstane skryté, dokud uživatel neklikne na tlačítko
+        document.getElementById('email-confirmation').style.display = 'none';
+        document.querySelector('.payment-methods').style.display = 'none'; // Skryje platební metody ihned
+      }
+      if (method === 'Platba kartou') {
+        alert('❌ Platební brána není momentálně dostupná. Použijte bankovní účet nebo Bitcoin.');
+        return;
+      }
+      
       const apiUrl =
         window.location.hostname === 'localhost'
           ? 'http://localhost:3000/api/generate-pdf'
           : 'https://bit-fit-server-e57aec3208e1.herokuapp.com/api/generate-pdf';
 
-    fetch(apiUrl, {
+      fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(orderData),
@@ -172,7 +191,6 @@
         .then((data) => {
           if (data.success) {
             console.log("✅ Platba úspěšně zpracována.");
-            document.getElementById('email-confirmation').style.display = 'block';
             document.querySelector('.payment-methods').style.display = 'none';
           } else {
             throw new Error(data.error || '❌ Došlo k chybě při zpracování objednávky.');
@@ -183,6 +201,43 @@
           console.error('❌ Chyba při platbě:', error);
         });
     }
+
+    function confirmBankPayment() {
+      alert('Děkujeme! Potvrzení platby bylo odesláno.');
+      document.getElementById('bank-details').style.display = 'none';
+      document.getElementById('email-confirmation').style.display = 'block';
+      sendPaymentEmail();
+      setTimeout(returnToHome, 5000); // Po 5 sekundách přesměrování na domovskou stránku
+    }
+
+
+function sendPaymentEmail() {
+  if (!formData.email || !formData.name) {
+    console.error('❌ Chybí data o klientovi: ', formData);
+    alert('Chyba: Nemáme dostatek údajů pro odeslání potvrzení platby.');
+    return;
+  }
+
+  const emailData = {
+    email: 'info@bit-fit.cz',
+    subject: 'Nová platba na bankovní účet',
+    message: `Klient ${formData.name} (${formData.email}) oznámil, že provedl platbu na bankovní účet. 
+    Prosím, ověřte příchozí platbu a odešlete jídelníček.`,
+  };
+
+  fetch('/api/send-email', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(emailData),
+  }).then(response => {
+    if (response.ok) {
+      console.log('✅ Email úspěšně odeslán.');
+    } else {
+      console.error('❌ Chyba při odesílání emailu.');
+    }
+  }).catch(error => console.error('❌ Chyba:', error));
+}
+
 
     // 🛠️ Funkce pro návrat na domovskou stránku
     function returnToHome() {
