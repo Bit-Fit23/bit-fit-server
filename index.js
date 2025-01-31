@@ -39,7 +39,6 @@ app.get('/', (req, res) => {
 // ✅ Route pro generování PDF a odesílání e-mailu
 app.post('/api/generate-pdf', async (req, res) => {
   console.log('📩 Přijatý požadavek:', req.body);
-
   const {
     email, name, age, gender, height, weight,
     targetWeight, dietHistory, foodPreferences,
@@ -160,6 +159,49 @@ app.post('/api/generate-pdf', async (req, res) => {
   } catch (error) {
     console.error('⚠️ Neočekávaná chyba:', error);
     res.status(500).json({ success: false, error: 'Neočekávaná chyba při zpracování objednávky.' });
+  }
+});
+
+// ✅ Route pro odesílání kontaktního formuláře
+app.post('/contact', async (req, res) => {
+  console.log("📩 Přijatá kontaktní zpráva:", req.body);
+
+  const { name, email, subject, message } = req.body;
+
+  // ✅ Ověření, že všechna povinná pole jsou vyplněna
+  if (!name || !email || !message) {
+    console.error("❌ Chybějící povinné údaje.");
+    return res.status(400).json({ success: false, error: "Vyplňte všechna povinná pole." });
+  }
+
+  try {
+    // ✅ Vytvoření SMTP transportéru
+    const transporter = nodemailer.createTransport({
+      host: process.env.SMTP_HOST,
+      port: parseInt(process.env.SMTP_PORT, 10) || 587,
+      secure: parseInt(process.env.SMTP_PORT, 10) === 465, // true pro SSL/TLS, jinak false
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+    });
+
+    // ✅ Odeslání e-mailu
+    const mailOptions = {
+      from: process.env.SMTP_USER, // Tvůj e-mail
+      to: process.env.SMTP_USER, // Zpráva přijde na stejný administrátorský e-mail
+      subject: `📩 Nová zpráva z kontaktního formuláře: ${subject || "Žádný předmět"}`,
+      text: `Jméno: ${name}\nE-mail: ${email}\n\nZpráva:\n${message}`,
+    };
+
+    await transporter.sendMail(mailOptions);
+    console.log("✅ Kontaktní formulář úspěšně odeslán.");
+    
+    res.status(200).json({ success: true, message: "Zpráva byla úspěšně odeslána." });
+
+  } catch (error) {
+    console.error("❌ Chyba při odesílání e-mailu:", error);
+    res.status(500).json({ success: false, error: "Nepodařilo se odeslat zprávu. Zkuste to znovu." });
   }
 });
 
