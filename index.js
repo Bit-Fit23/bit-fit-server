@@ -193,7 +193,7 @@ app.post('/api/contact', async (req, res) => {
 
     await transporter.sendMail(mailOptions);
     console.log("✅ Kontaktní formulář úspěšně odeslán.");
-    
+
     res.status(200).json({ success: true, message: "Zpráva byla úspěšně odeslána." });
 
   } catch (error) {
