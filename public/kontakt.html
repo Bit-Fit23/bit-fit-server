@@ -111,7 +111,7 @@
       formMessage.textContent = "Odesílám zprávu...";
 
       try {
-        const response = await fetch('https://bit-fit-server.herokuapp.com/api/contact', { 
+        const response = await fetch('https://bit-fit-server.herokuapp.com/contact', { 
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ name, email, subject, message }),
