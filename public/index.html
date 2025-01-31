@@ -22,9 +22,19 @@
     header img {
       width: 50%; /* Zmenšíme logo na 50% šířky rodičovského elementu */
       max-width: 400px; /* Nastavíme maximální šířku */
+      min-width: 200px; /* Zajistí, že logo nebude příliš malé */
       margin: 20px auto; /* Přidáme prostor nad a pod logem pro lepší zarovnání */
       display: block;
     }
+
+    @media (max-width: 768px) {
+     header img {
+      width: 70%; /* Zvýšíme šířku loga na mobilu */
+      max-width: 500px; /* Umožní větší logo na menších zařízeních */
+      min-width: 250px; /* Větší min. šířka na mobilu */
+      margin: 10px auto; /* Mírně snížíme mezeru kolem loga */
+    }
+  }
 
 /* 🔹 ZÁKLADNÍ NAVIGACE */
 nav {
