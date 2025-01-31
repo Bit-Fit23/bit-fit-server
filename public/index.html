@@ -73,22 +73,33 @@ nav a:hover {
 /* ======= MOBILNÍ VERZE ======= */
 @media (max-width: 768px) {
   header {
-    min-height: 40vh;
-    padding-top: 10vh;
-    padding-bottom: 5vh;
+    min-height: auto;  /* Dynamická výška podle obsahu */
+    padding: 10px 0;  /* Menší mezery nahoře a dole */
+    display: flex;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
   }
 
   header img {
-    width: 60%;
-    max-width: 250px;
+    width: 120px;  /* Pevná šířka pro mobilní verzi */
+    height: 120px;  /* Pevná výška (zachová kruhový tvar) */
+    aspect-ratio: 1/1;  /* Zajistí, že obrázek zůstane kruhový */
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
   }
 
-  /* ✅ HAMBURGER MENU - Skryté na PC, viditelné jen na mobilech */
+  .hero {
+    padding-top: 0;  /* Odstranění nadbytečné mezery nad textem */
+    margin-top: -10px; /* Přiblížení textu ještě více */
+  }
+
+  /* 📌 HAMBURGER MENU - zobrazí se pouze na mobilech */
   .menu-toggle {
     display: block;
     position: absolute;
-    right: 20px;
+    right: 15px;
     top: 15px;
     background: none;
     border: none;
@@ -104,7 +115,7 @@ nav a:hover {
     transform: rotate(90deg);
   }
 
-  /* ✅ Upravíme navigaci, aby fungovala jako mobilní menu */
+  /* 📌 NAVIGACE PRO MOBIL */
   nav {
     flex-direction: column;
     align-items: center;
@@ -121,7 +132,7 @@ nav a:hover {
     transition: all 0.3s ease-in-out;
   }
 
-  /* ✅ Otevření menu */
+  /* 📌 Otevření menu */
   nav ul.show {
     max-height: 500px;
     opacity: 1;
@@ -130,7 +141,7 @@ nav a:hover {
 }
 
 /* ✅ Skrytí tlačítka na PC */
-@media (min-width: 769px) {
+@media (min-width: 768px) {
   .menu-toggle {
     display: none !important;
   }
