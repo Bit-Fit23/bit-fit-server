@@ -168,28 +168,25 @@ app.post('/contact', async (req, res) => {
 
   const { name, email, subject, message } = req.body;
 
-  // ✅ Ověření, že všechna povinná pole jsou vyplněna
   if (!name || !email || !message) {
     console.error("❌ Chybějící povinné údaje.");
     return res.status(400).json({ success: false, error: "Vyplňte všechna povinná pole." });
   }
 
   try {
-    // ✅ Vytvoření SMTP transportéru
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: parseInt(process.env.SMTP_PORT, 10) || 587,
-      secure: parseInt(process.env.SMTP_PORT, 10) === 465, // true pro SSL/TLS, jinak false
+      secure: parseInt(process.env.SMTP_PORT, 10) === 465,
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
       },
     });
 
-    // ✅ Odeslání e-mailu
     const mailOptions = {
-      from: process.env.SMTP_USER, // Tvůj e-mail
-      to: process.env.SMTP_USER, // Zpráva přijde na stejný administrátorský e-mail
+      from: process.env.SMTP_USER,
+      to: process.env.SMTP_USER,
       subject: `📩 Nová zpráva z kontaktního formuláře: ${subject || "Žádný předmět"}`,
       text: `Jméno: ${name}\nE-mail: ${email}\n\nZpráva:\n${message}`,
     };
