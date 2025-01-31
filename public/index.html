@@ -18,23 +18,32 @@
       background-color: #f4c542;
       padding: 20px 50px;
       text-align: center;
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      justify-content: center; 
+      min-height: 25vh; /* Nastaví minimální výšku hlavičky */
     }
     header img {
-      width: 50%; /* Zmenšíme logo na 50% šířky rodičovského elementu */
-      max-width: 400px; /* Nastavíme maximální šířku */
-      min-width: 200px; /* Zajistí, že logo nebude příliš malé */
-      margin: 20px auto; /* Přidáme prostor nad a pod logem pro lepší zarovnání */
+      width: 50%;
+      max-width: 400px;
+      min-width: 200px;
       display: block;
+      margin: 0 auto; /* Zruší velké horní mezery */
     }
 
     @media (max-width: 768px) {
-     header img {
-      width: 70%; /* Zvýšíme šířku loga na mobilu */
-      max-width: 500px; /* Umožní větší logo na menších zařízeních */
-      min-width: 250px; /* Větší min. šířka na mobilu */
-      margin: 10px auto; /* Mírně snížíme mezeru kolem loga */
-    }
-  }
+      header {
+        min-height: 30vh; /* Zvětšíme výšku hlavičky na mobilech */
+        padding: 10px; /* Mírně upravíme padding */
+      }
+    
+      header img {
+        width: 70%;
+        max-width: 300px; /* Lehce omezíme velikost na mobilu */
+        margin: 0 auto; /* Odstraníme nadbytečnou mezeru */
+      }
+    }  
 
 /* 🔹 ZÁKLADNÍ NAVIGACE */
 nav {
