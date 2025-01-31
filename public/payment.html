@@ -85,19 +85,23 @@
     <h2>Zvolte způsob platby</h2>
     <div class="payment-methods">
       <button onclick="simulatePayment('Platba kartou')">Platba kartou (nedostupné)</button>
-      <button onclick="createBTCInvoice()">Bitcoin</button>
+      <button onclick="simulatePayment('Bitcoin')">Bitcoin</button>
       <button onclick="simulatePayment('Bankovní účet')">Bankovní účet</button>
     </div>
     
     <div class="btc-payment" id="btc-payment" style="display: none; text-align: left; margin-top: 20px;">
       <h3>Platba Bitcoinem</h3>
-      <p>Naskenujte tento QR kód nebo klikněte na odkaz pro platbu:</p>
-      <img id="btc-qr-code" src="" alt="BTC QR kód" width="200">
-      <p><a id="btc-invoice-link" href="#" target="_blank">Otevřít platební stránku</a></p>
+      <p>Vyberte si způsob platby a naskenujte odpovídající QR kód:</p>
+    
+      <h4>⚡ Lightning Network</h4>
+      <img src="/qr_ln.jpg" alt="Lightning QR kód" width="200">
+    
+      <h4>🔗 On-chain platba</h4>
+      <img src="/qr_onchain.jpg" alt="On-chain QR kód" width="200">
+    
       <p><strong>Poznámka:</strong> Při platbě prosím uveďte svůj e-mail do poznámky, abychom mohli platbu správně přiřadit.</p>
       <button onclick="confirmBTCPayment()">Provedl jsem platbu</button>
     </div>
-    
     
     <div class="bank-details" id="bank-details" style="display: none; text-align: left; margin-top: 20px;">
       <h3>Platba na bankovní účet</h3>
@@ -290,30 +294,6 @@ function sendBTCPaymentEmail() {
       alert('✅ Děkujeme za vaši objednávku!');
       window.location.href = 'index.html';
     }
-// 🛠️ Funkce pro vytvoření BTC faktury
-function createBTCInvoice() {
-  fetch('/api/create-btc-invoice', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ amount: totalPrice / 1000_000_000 }) // Přepočet na BTC (pokud celková cena je v satoshis)
-  })
-  .then(response => response.json())
-  .then(data => {
-    if (data.checkoutLink) {
-      document.getElementById('btc-invoice-link').href = data.checkoutLink;
-      document.getElementById('btc-invoice-link').textContent = "Otevřít platební stránku";
-      document.getElementById('btc-qr-code').src = data.checkoutLink + "/qr"; // BTC Pay generuje QR
-      document.getElementById('btc-payment').style.display = 'block';
-    } else {
-      alert("❌ Chyba při vytváření BTC faktury.");
-    }
-  })
-  .catch(error => {
-    console.error("❌ Chyba při volání BTC Pay Serveru:", error);
-    alert("❌ Chyba při vytváření BTC faktury.");
-  });
-}
-
   </script>
 </body>
 </html>

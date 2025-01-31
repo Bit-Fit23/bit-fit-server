@@ -7,12 +7,6 @@ const path = require('path');
 const cors = require('cors');
 require('dotenv').config(); // Načtení proměnných prostředí
 
-const axios = require("axios"); // Přidáme axios pro HTTP požadavky
-
-const BTC_PAY_API_KEY = "3e6aedaf4f9a0a434446cf9776e6f55d9b9ba754";
-const BTC_PAY_SERVER_URL = "https://btcpay0.voltageapp.io";
-const STORE_ID = "HYh9Jsh9ydrh8yZbxW4nY35gQfGcTte5RCro8pVYhew2";
-
 const app = express();
 
 // ✅ Funkce pro odstranění diakritiky
@@ -165,38 +159,6 @@ app.post('/api/generate-pdf', async (req, res) => {
   } catch (error) {
     console.error('⚠️ Neočekávaná chyba:', error);
     res.status(500).json({ success: false, error: 'Neočekávaná chyba při zpracování objednávky.' });
-  }
-});
-
-// ✅ Endpoint pro vytvoření BTC faktury
-app.post("/api/create-btc-invoice", async (req, res) => {
-  try {
-      const { amount } = req.body; // Přijmeme částku od klienta
-      const response = await axios.post(
-          `${BTC_PAY_SERVER_URL}/api/v1/stores/${STORE_ID}/invoices`,
-          {
-              amount: amount,
-              currency: "BTC",
-              checkout: {
-                  speedPolicy: "HighSpeed",
-                  paymentMethods: ["BTC", "BTC-Lightning"]
-              }
-          },
-          {
-              headers: {
-                  "Content-Type": "application/json",
-                  Authorization: `Basic ${BTC_PAY_API_KEY}`
-              }
-          }
-      );
-
-      res.json({
-          invoiceId: response.data.id,
-          checkoutLink: response.data.checkoutLink
-      });
-  } catch (error) {
-      console.error("❌ Chyba při vytváření BTC faktury:", error);
-      res.status(500).json({ error: "Nepodařilo se vytvořit BTC fakturu" });
   }
 });
 
