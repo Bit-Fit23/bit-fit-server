@@ -7,52 +7,133 @@
   <title>Bit-Fit | Zdravý životní styl začíná zde</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: 'Roboto', sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f4f4f4;
-      color: #333;
-    }
-    header {
-      background-color: #f4c542;
-      padding: 20px 50px;
-      text-align: center;
-      display: flex; 
-      flex-direction: column; 
-      align-items: center; 
-      justify-content: center; 
-      min-height: 25vh; /* Nastaví minimální výšku hlavičky */
-    }
-    header img {
-      width: 50%;
-      max-width: 400px;
-      min-width: 200px;
-      display: block;
-      margin: 0 auto; /* Zruší velké horní mezery */
-    }
+/* ======= GLOBÁLNÍ NASTAVENÍ ======= */
+body {
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+  color: #333;
+}
 
-    @media (max-width: 768px) {
-      header {
-        min-height: 30vh; /* Zvětšíme výšku hlavičky na mobilech */
-        padding: 10px; /* Mírně upravíme padding */
-      }
-    
-      header img {
-        width: 70%;
-        max-width: 300px; /* Lehce omezíme velikost na mobilu */
-        margin: 0 auto; /* Odstraníme nadbytečnou mezeru */
-      }
-    }  
+/* ======= HEADER + LOGO ======= */
+header {
+  background-color: #f4c542;
+  padding: 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 25vh;
+  position: relative;
+}
 
-/* 🔹 ZÁKLADNÍ NAVIGACE */
+header img {
+  width: 50%;
+  max-width: 400px;
+  min-width: 200px;
+  display: block;
+}
+
+/* ======= NAVIGACE ======= */
 nav {
   display: flex;
-  justify-content: center; /* Zarovnání na střed na desktopu */
+  justify-content: center;
   align-items: center;
   padding: 10px 20px;
   background-color: #f4c542;
   position: relative;
+}
+
+nav ul {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  gap: 15px;
+}
+
+nav a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  font-size: 18px;
+  padding: 10px 15px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  white-space: nowrap;
+}
+
+nav a:hover {
+  background-color: #333;
+  color: #f4c542;
+}
+
+/* ======= MOBILNÍ VERZE ======= */
+@media (max-width: 768px) {
+  header {
+    min-height: 40vh;
+    padding-top: 10vh;
+    padding-bottom: 5vh;
+    justify-content: center;
+  }
+
+  header img {
+    width: 60%;
+    max-width: 250px;
+  }
+
+  /* ✅ HAMBURGER MENU - Skryté na PC, viditelné jen na mobilech */
+  .menu-toggle {
+    display: block;
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    background: none;
+    border: none;
+    font-size: 30px;
+    cursor: pointer;
+    padding: 10px;
+    color: #333;
+    transition: transform 0.3s ease;
+    z-index: 10;
+  }
+
+  .menu-toggle.active {
+    transform: rotate(90deg);
+  }
+
+  /* ✅ Upravíme navigaci, aby fungovala jako mobilní menu */
+  nav {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  nav ul {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transform: scaleY(0);
+    transition: all 0.3s ease-in-out;
+  }
+
+  /* ✅ Otevření menu */
+  nav ul.show {
+    max-height: 500px;
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+/* ✅ Skrytí tlačítka na PC */
+@media (min-width: 769px) {
+  .menu-toggle {
+    display: none !important;
+  }
 }
 
 /* 🔹 SEZNAM NAVIGACE */
@@ -313,26 +394,25 @@ nav a:hover {
     </div>
   </footer>
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      // Vytvoření hamburger tlačítka pouze pro mobilní zařízení
-      if (window.innerWidth <= 768) {
+document.addEventListener("DOMContentLoaded", function () {
+  function addMobileMenu() {
+    if (window.innerWidth <= 768) {  
+      if (!document.querySelector(".menu-toggle")) { // ✅ Zabrání opakovanému přidání tlačítka
         const menuToggle = document.createElement("button");
         menuToggle.classList.add("menu-toggle");
         menuToggle.textContent = "☰";
-  
-        // Přidání tlačítka do hlavičky
-        document.querySelector("header").insertBefore(menuToggle, document.querySelector("nav"));
-  
+
+        const header = document.querySelector("header");
         const menu = document.querySelector("nav ul");
-  
-        // Funkce pro otevírání a zavírání menu
+
+        header.insertBefore(menuToggle, document.querySelector("nav"));
+
         menuToggle.addEventListener("click", function () {
           menu.classList.toggle("show");
           menuToggle.classList.toggle("active");
           menuToggle.textContent = menuToggle.classList.contains("active") ? "✖" : "☰";
         });
-  
-        // Zavření menu při kliknutí mimo něj
+
         document.addEventListener("click", function (event) {
           if (!menu.contains(event.target) && !menuToggle.contains(event.target)) {
             menu.classList.remove("show");
@@ -340,8 +420,7 @@ nav a:hover {
             menuToggle.textContent = "☰";
           }
         });
-  
-        // Zavření menu po kliknutí na odkaz v něm
+
         document.querySelectorAll("nav a").forEach(link => {
           link.addEventListener("click", function () {
             menu.classList.remove("show");
@@ -350,7 +429,18 @@ nav a:hover {
           });
         });
       }
-    });
+    } else {
+      const existingToggle = document.querySelector(".menu-toggle");
+      if (existingToggle) {
+        existingToggle.remove(); // ✅ Tlačítko se odstraní na desktop verzi
+      }
+    }
+  }
+
+  addMobileMenu();
+  window.addEventListener("resize", addMobileMenu); // ✅ Dynamická změna při změně velikosti okna
+});
+
   </script>  
 </body>
 </html
