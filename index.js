@@ -163,7 +163,7 @@ app.post('/api/generate-pdf', async (req, res) => {
 });
 
 // ✅ Route pro odesílání kontaktního formuláře
-app.post('/contact', async (req, res) => {
+app.post('/api/contact', async (req, res) => {
   console.log("📩 Přijatá kontaktní zpráva:", req.body);
 
   const { name, email, subject, message } = req.body;
