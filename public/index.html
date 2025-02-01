@@ -1,20 +1,56 @@
 <!DOCTYPE html>
 <html lang="cs">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Bit-Fit: Zdravý životní styl a profesionální jídelníčky. Objednejte si plán na míru a začněte svou proměnu ještě dnes!">
-  <title>Bit-Fit | Zdravý životní styl začíná zde</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-  <style>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <!-- ✅ Titulek a meta popis -->
+    <title>Bit-Fit | Individuální jídelníčky pro zdravý životní styl</title>
+    <meta name="description" content="Chcete zdravý životní styl? Bit-Fit vám vytvoří jídelníček na míru – hubnutí, svalová hmota nebo lepší zdraví. Začněte ještě dnes!">
+    
+    <!-- ✅ SEO meta tagy -->
+    <meta name="keywords" content="jídelníček na míru, zdravý životní styl, fitness plán, výživové poradenství, zdravá strava, hubnutí, nabírání svalů">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="Bit-Fit.cz">
+  
+    <!-- ✅ Open Graph (Facebook & LinkedIn) -->
+    <meta property="og:title" content="Bit-Fit | Individuální jídelníčky pro zdravý životní styl">
+    <meta property="og:description" content="Chcete zdravý životní styl? Bit-Fit vám vytvoří jídelníček na míru – hubnutí, svalová hmota nebo lepší zdraví.">
+    <meta property="og:image" content="https://bit-fit.cz/images/preview.jpg">
+    <meta property="og:url" content="https://bit-fit.cz">
+    <meta property="og:type" content="website">
+  
+    <!-- ✅ Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Bit-Fit | Individuální jídelníčky pro zdravý životní styl">
+    <meta name="twitter:description" content="Jídelníček na míru pro hubnutí, svalovou hmotu nebo lepší zdraví.">
+    <meta name="twitter:image" content="https://bit-fit.cz/images/preview.jpg">
+  
+    <!-- ✅ Preload fontů pro rychlejší vykreslení -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" as="style">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  
+    <!-- ✅ Načtení CSS (externí soubor pro lepší cacheování) -->
+    <link rel="stylesheet" href="styles.css">
+  
+    <!-- ✅ JavaScript soubory s `defer` -->
+    <script defer src="script.js"></script>
+
+    <!-- ✅ Favicon -->
+    <link rel="icon" type="image/png" href="https://bit-fit.cz/favicon.png">
+  
+    <!-- ✅ Opravený CSS -->
+    <style>
+    
 /* ======= GLOBÁLNÍ NASTAVENÍ ======= */
 body {
-  font-family: 'Roboto', sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #f4f4f4;
-  color: #333;
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
 }
+
 /* 📌 Kontejner pro celý jídelníček */
 .meal-plan {
     max-width: 800px;
@@ -418,6 +454,29 @@ nav a:hover {
       }
     }
   </style>
+
+<!-- ✅ Google Analytics 4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-08RVXVYRKN');
+</script>
+
+<!-- ✅ Facebook Pixel -->
+<script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', 'XXXXXXXXXXXXXXX');
+  fbq('track', 'PageView');
+</script>
 </head>
 <body>
   <header>
