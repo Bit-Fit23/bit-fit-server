@@ -15,6 +15,77 @@ body {
   background-color: #f4f4f4;
   color: #333;
 }
+/* 📌 Kontejner pro celý jídelníček */
+.meal-plan {
+    max-width: 800px;
+    margin: auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 📌 Hlavní nadpis pro celý den ("Den 1 – Individuální stravovací plán") */
+.meal-plan h4 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #474746;
+    background: linear-gradient(to right, #f1f0b0, #faac3f); /* Jemný gradient */
+    padding: 8px 15px;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+
+/* 📌 Každé jídlo v samostatném boxu */
+.meal {
+    background: #fcfcfc; /* Jemně světle šedé pozadí */
+    padding: 15px 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+    text-align: left;
+    width: 100%;
+    margin-bottom: 20px;
+    border-left: 5px solid #f4c542; /* Přidá jemný barevný akcent */
+}
+
+/* 📌 Nadpisy jednotlivých jídel ("Snídaně", "Svačina"...) */
+.meal h5 {
+    font-size: 1.1rem; /* Bylo 1.3rem → nyní vizuálně sladěné */
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #f4c542;
+    display: flex;
+    align-items: center;
+}
+
+/* 📌 Ikona vedle názvu jídla */
+.meal h5::before {
+    font-size: 1rem; /* Menší a vyváženější velikost */
+    display: inline-block;
+    width: 20px; /* Pevná šířka pro stejné zarovnání */
+    text-align: center;
+}
+
+/* 📌 Menší font pro ingredience, postup a nutriční hodnoty */
+.small-text strong {
+    font-size: 0.9rem;
+    color: #333;
+    background: #fff3cd; /* Světle žluté zvýraznění */
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+/* 📌 Zvýraznění ingrediencí a nutričních hodnot */
+.meal strong {
+    font-size: 0.9rem;
+    color: #333;
+}
+
+/* 📌 Větší mezery mezi odstavci uvnitř boxu */
+.meal p {
+    margin: 6px 0;
+}
 
 /* ======= HEADER + LOGO ======= */
 header {
@@ -68,6 +139,12 @@ nav a {
 nav a:hover {
   background-color: #333;
   color: #f4c542;
+}
+
+.meal:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
 }
 
 /* ======= MOBILNÍ VERZE ======= */
@@ -382,7 +459,68 @@ nav a:hover {
         <li style="margin-bottom: 20px;">
             <strong>4. Začněte svou cestu ke zdravému životnímu stylu:</strong> Sledujte svůj plán, užívejte si chutné pokrmy a sledujte, jak se vaše tělo mění.
         </li>
-    </ul>
+        <h3>Ukázka analýzy a jídelníčku</h3>
+
+        <div class="analysis">
+            <h4>📊 Analýza: Výpočet kalorického příjmu a makroživin</h4>
+            <p>Na základě vaší výšky, váhy, věku a aktivity jsme spočítali váš optimální kalorický příjem:</p>
+            <ul>
+                <li><strong>Bazální metabolismus (BMR):</strong> 1665 kcal</li>
+                <li><strong>Celkový denní energetický výdej (TDEE):</strong> 2581 kcal</li>
+                <li><strong>Doporučený kalorický příjem pro nárůst svalové hmoty:</strong> 2839 kcal</li>
+            </ul>
+            <h4>🍽 Doporučené rozložení makroživin:</h4>
+            <ul>
+                <li><strong>Bílkoviny:</strong> 248 g (35 % celkového příjmu)</li>
+                <li><strong>Sacharidy:</strong> 319 g (45 % celkového příjmu)</li>
+                <li><strong>Tuky:</strong> 63 g (20 % celkového příjmu)</li>
+            </ul>
+        </div>
+        
+        <div class="meal-plan">
+            <h4>🍎 Den 1 – Individuální stravovací plán</h4>
+        
+            <div class="meal">
+                <h5>🥚 Snídaně: Vaječná omeleta se sýrem a zeleninou</h5>
+                <p class="small-text"><strong>Ingredience:</strong> 3 vejce, 50 g čedaru, ½ papriky, 1 hrst špenátu, 10 g olivového oleje</p>
+                <p class="small-text"><strong>Postup:</strong> Rozšlehejte vejce a přidejte nastrouhaný sýr. Na pánvi rozehřejte olej, přidejte zeleninu a krátce orestujte. Nalijte vejce, nechte ztuhnout a přeložte.</p>
+                <p class="small-text"><strong>Nutriční hodnoty:</strong> 520 kcal, 42 g bílkovin, 34 g tuků, 6 g sacharidů</p>
+            </div>
+        
+            <div class="meal">
+                <h5>🥄 Svačina: Tvaroh s ovocem a ořechy</h5>
+                <p class="small-text"><strong>Ingredience:</strong> 150 g tvarohu, 50 g borůvek, 10 g mandlí</p>
+                <p class="small-text"><strong>Postup:</strong> Smíchejte tvaroh s borůvkami a posypte nasekanými mandlemi.</p>
+                <p class="small-text"><strong>Nutriční hodnoty:</strong> 320 kcal, 30 g bílkovin, 10 g tuků, 25 g sacharidů</p>
+            </div>
+        
+            <div class="meal">
+                <h5>🥩 Oběd: Hovězí steak s bramborem a dušenou zeleninou</h5>
+                <p class="small-text"><strong>Ingredience:</strong> 200 g hovězího steaku, 150 g brambor, 100 g brokolice, 100 g mrkve, 10 g olivového oleje</p>
+                <p class="small-text"><strong>Postup:</strong> Steak osolte a opepřete, opékejte 3-4 minuty z každé strany. Brambory uvařte, zeleninu poduste na páře. Servírujte steak s přílohou.</p>
+                <p class="small-text"><strong>Nutriční hodnoty:</strong> 720 kcal, 68 g bílkovin, 25 g tuků, 55 g sacharidů</p>
+            </div>
+        
+            <div class="meal">
+                <h5>🥤 Svačina: Proteinový shake s banánem</h5>
+                <p class="small-text"><strong>Ingredience:</strong> 30 g syrovátkového proteinu, 200 ml mléka, 1 banán</p>
+                <p class="small-text"><strong>Postup:</strong> Všechny ingredience dejte do mixéru a mixujte do hladka.</p>
+                <p class="small-text"><strong>Nutriční hodnoty:</strong> 380 kcal, 35 g bílkovin, 5 g tuků, 50 g sacharidů</p>
+            </div>
+        
+            <div class="meal">
+                <h5>🐟 Večeře: Pečený losos s batáty a salátem</h5>
+                <p class="small-text"><strong>Ingredience:</strong> 150 g lososa, 200 g batátů, rukola, 10 g olivového oleje</p>
+                <p class="small-text"><strong>Postup:</strong> Lososa osolte a pečte na 180°C 15 minut. Batáty nakrájejte a pečte 25 minut. Servírujte s rukolovým salátem.</p>
+                <p class="small-text"><strong>Nutriční hodnoty:</strong> 600 kcal, 55 g bílkovin, 28 g tuků, 45 g sacharidů</p>
+            </div>
+        
+            <h4>📌 Denní souhrn makroživin</h4>
+            <p><strong>Kalorie:</strong> 2570 kcal</p>
+            <p><strong>Bílkoviny:</strong> 236 g | <strong>Tuky:</strong> 103 g | <strong>Sacharidy:</strong> 181 g</p>
+        </div>
+             
+      </ul>
     <p style="text-align: justify; text-justify: inter-word;">
         💡 <strong>Tip:</strong> Pokud si nejste jistí, který plán je pro vás nejlepší, nebo máte další otázky, neváhejte nás kontaktovat prostřednictvím našeho formuláře v sekci <a href="kontakt.html">Kontakt</a>. Rádi vám poradíme!
     </p>
