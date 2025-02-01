@@ -71,29 +71,17 @@ nav a:hover {
 }
 
 /* ======= MOBILNÍ VERZE ======= */
+/* ======= MOBILNÍ VERZE ======= */
 @media (max-width: 768px) {
-  header {
-    min-height: auto;  /* Dynamická výška podle obsahu */
-    padding: 10px 0;  /* Menší mezery nahoře a dole */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
+    header img {
+        width: 200px; /* Zvýšení velikosti loga */
+        height: auto;
+        margin-bottom: -10px; /* Posunutí loga blíže k textu */
+    }
 
-  header img {
-    width: 120px;  /* Pevná šířka pro mobilní verzi */
-    height: 120px;  /* Pevná výška (zachová kruhový tvar) */
-    aspect-ratio: 1/1;  /* Zajistí, že obrázek zůstane kruhový */
-    object-fit: contain;
-    display: block;
-    margin: 0 auto;
-  }
-
-  .hero {
-    padding-top: 0;  /* Odstranění nadbytečné mezery nad textem */
-    margin-top: -10px; /* Přiblížení textu ještě více */
-  }
+    .hero {
+        margin-top: -30px; /* Přiblížení textu ještě více */
+    }
 
   /* 📌 HAMBURGER MENU - zobrazí se pouze na mobilech */
   .menu-toggle {
@@ -451,7 +439,6 @@ document.addEventListener("DOMContentLoaded", function () {
   addMobileMenu();
   window.addEventListener("resize", addMobileMenu); // ✅ Dynamická změna při změně velikosti okna
 });
-
   </script>  
 </body>
-</html
+</html>
