@@ -177,8 +177,8 @@
         recipePrice: recipePrice,
         totalPrice: totalPrice,
         wantsRecipes: wantsRecipes,
-        discountCode: appliedCode ? appliedCode : "Nepoužit", // Přidáme kód do dat, pokud byl použit
-        discountInfo: appliedCode ? `Použitý kód: ${appliedCode} (-${appliedDiscount * 100}%)` : "Sleva nebyla použita"
+        discountCode: appliedCode && appliedCode.trim() !== "" ? appliedCode : "Nepoužit",
+        discountInfo: appliedCode && appliedCode.trim() !== "" ? `Použitý kód: ${appliedCode} (-${appliedDiscount * 100}%)` : "Sleva nebyla použita"
       };
 
       console.log("📩 Odesílám objednávku na backend:", JSON.stringify(orderData, null, 2));
