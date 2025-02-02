@@ -47,9 +47,15 @@ app.post('/api/generate-pdf', async (req, res) => {
     planPrice = 0,
     recipePrice = 0,
     totalPrice = 0,
-    discountCode = "Nepoužit",
-    discountInfo = "Sleva nebyla použita"
+    discountCode,
+    discountInfo
   } = req.body;
+  // 🛠 Oprava: Zajištění, že discountCode není undefined
+  const finalDiscountCode = discountCode && discountCode.trim() !== "" ? discountCode : "Nepoužit";
+  const finalDiscountInfo = discountInfo && discountInfo.trim() !== "" ? discountInfo : "Sleva nebyla použita";
+
+  console.log("🔍 Slevový kód přijatý ze serveru:", finalDiscountCode);
+  console.log("🔍 Informace o slevě:", finalDiscountInfo);
   
   let finalPrice = planPrice + recipePrice; // Standardní výpočet ceny
   // ✅ Ověříme platnost slevového kódu a aplikujeme slevu
