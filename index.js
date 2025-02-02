@@ -46,9 +46,29 @@ app.post('/api/generate-pdf', async (req, res) => {
     planName = "Nezvoleno",
     planPrice = 0,
     recipePrice = 0,
-    totalPrice = 0
+    totalPrice = 0,
+    discountCode = "Nepoužit",
+    discountInfo = "Sleva nebyla použita"
   } = req.body;
+  
+  let finalPrice = planPrice + recipePrice; // Standardní výpočet ceny
+  // ✅ Ověříme platnost slevového kódu a aplikujeme slevu
+  const validDiscounts = {
+    "MARA10": 0.10,  
+    "HONZA10": 0.10,  
+    "ZLATKA10": 0.10  
+  };
 
+  if (discountCode in validDiscounts) {
+    const discountPercent = validDiscounts[discountCode];
+    finalPrice = Math.round(finalPrice * (1 - discountPercent)); // Odečtení slevy
+    console.log(`✅ Sleva ${discountCode} byla aplikována: -${discountPercent * 100}%`);
+  } else {
+    discountCode = "Nepoužit";
+    discountInfo = "Sleva nebyla použita";
+  }
+
+  console.log("🔍 Konečná cena po slevě:", finalPrice);
   const wantsRecipes = recipePrice > 0;
 
   console.log("🔍 Vybraný plán:", planName);
@@ -109,7 +129,10 @@ app.post('/api/generate-pdf', async (req, res) => {
     doc.text(removeDiacritics(`Cena plánu: ${planPrice} Kč`));
     doc.text(removeDiacritics(`Požaduje recepty: ${wantsRecipes ? 'Ano' : 'Ne'}`));
     doc.text(removeDiacritics(`Cena za recepty: ${recipePrice} Kč`));
-    doc.text(removeDiacritics(`Celková cena: ${totalPrice} Kč`));
+    doc.text(removeDiacritics(`Slevový kód: ${discountCode}`));
+    doc.text(removeDiacritics(`Sleva: ${discountInfo}`));
+    doc.text(removeDiacritics(`Celková cena po slevě: ${finalPrice} Kč`));
+
     doc.end();
 
     writeStream.on('finish', async () => {
