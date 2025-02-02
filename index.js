@@ -39,6 +39,10 @@ app.get('/', (req, res) => {
 // ✅ Route pro generování PDF a odesílání e-mailu
 app.post('/api/generate-pdf', async (req, res) => {
   console.log('📩 Přijatý požadavek:', req.body);
+  if (!req.body || Object.keys(req.body).length === 0) {
+    console.error("❌ Chyba: Server nedostal žádná data!");
+    return res.status(400).json({ success: false, error: "Server nedostal žádná data!" });
+  }
   const {
     email, name, age, gender, height, weight,
     targetWeight, dietHistory, foodPreferences,
@@ -47,8 +51,8 @@ app.post('/api/generate-pdf', async (req, res) => {
     planPrice = 0,
     recipePrice = 0,
     totalPrice = 0,
-    discountCode,
-    discountInfo
+    discountCode = "Nepoužit", // Pokud není zadán, nastavíme výchozí hodnotu
+    discountInfo = "Sleva nebyla použita" // Výchozí hodnota
   } = req.body;
   // 🛠 Oprava: Zajištění, že discountCode není undefined
   const finalDiscountCode = discountCode && discountCode.trim() !== "" ? discountCode : "Nepoužit";
@@ -65,7 +69,7 @@ app.post('/api/generate-pdf', async (req, res) => {
     "ZLATKA10": 0.10  
   };
 
-  if (discountCode in validDiscounts) {
+  if (discountCode && validDiscounts.hasOwnProperty(discountCode)) {
     const discountPercent = validDiscounts[discountCode];
     finalPrice = Math.round(finalPrice * (1 - discountPercent)); // Odečtení slevy
     console.log(`✅ Sleva ${discountCode} byla aplikována: -${discountPercent * 100}%`);
@@ -73,6 +77,7 @@ app.post('/api/generate-pdf', async (req, res) => {
     discountCode = "Nepoužit";
     discountInfo = "Sleva nebyla použita";
   }
+
 
   console.log("🔍 Konečná cena po slevě:", finalPrice);
   const wantsRecipes = recipePrice > 0;
