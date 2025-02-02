@@ -81,20 +81,19 @@
       <p id="recipe-row"><strong>Recepty:</strong> <span id="recipes">Ne</span></p>
       <p><strong>Celková cena:</strong> <span id="total-price">0 Kč</span></p>
     </div>
-
     <div class="discount-section">
       <label for="discount-code"><strong>Slevový kód:</strong></label>
       <input type="text" id="discount-code" placeholder="Zadejte kód" oninput="this.value = this.value.toUpperCase()">
       <button onclick="applyDiscount()">Použít kód</button>
       <p id="discount-message" style="color: red; display: none;">Neplatný kód</p>
     </div>
-    
     <h2>Zvolte způsob platby</h2>
     <div class="payment-methods">
       <button onclick="simulatePayment('Platba kartou')">Platba kartou (nedostupné)</button>
       <button onclick="simulatePayment('Bitcoin')">Bitcoin</button>
       <button onclick="simulatePayment('Bankovní účet')">Bankovní účet</button>
     </div>
+    
     <div class="btc-payment" id="btc-payment" style="display: none; text-align: left; margin-top: 20px;">
       <h3>Platba Bitcoinem</h3>
       <p>Vyberte si způsob platby a naskenujte odpovídající QR kód:</p>
@@ -177,7 +176,9 @@
         planPrice: planPrice,
         recipePrice: recipePrice,
         totalPrice: totalPrice,
-        wantsRecipes: wantsRecipes
+        wantsRecipes: wantsRecipes,
+        discountCode: appliedCode ? appliedCode : "Nepoužit", // Přidáme kód do dat, pokud byl použit
+        discountInfo: appliedCode ? `Použitý kód: ${appliedCode} (-${appliedDiscount * 100}%)` : "Sleva nebyla použita"
       };
 
       console.log("📩 Odesílám objednávku na backend:", JSON.stringify(orderData, null, 2));
@@ -295,56 +296,39 @@ function sendBTCPaymentEmail() {
   }).catch(error => console.error('❌ Chyba:', error));
 }
 
-// 🛠️ Seznam platných kódů a jejich slev
-const discountCodes = {
-  "MARA10": 0.10,  // 10% sleva
-  "HONZA10": 0.10  // Přidáme další partnery později
-  "ZLATKA10": 0.10  // Přidáme další partnery později
-};
-
-let appliedDiscount = 0;  // Globální proměnná pro uložení slevy
-let appliedCode = "";  // Uložený použitý kód
-let finalPrice = totalPrice; // Globální proměnná pro upravenou cenu
-
-function applyDiscount() {
-  const codeInput = document.getElementById("discount-code").value.trim();
-  
-  if (discountCodes[codeInput]) {
-    appliedDiscount = discountCodes[codeInput]; // Uloží procentuální slevu
-    appliedCode = codeInput; // Uloží použitý kód
-
-    finalPrice = Math.round(totalPrice * (1 - appliedDiscount)); // Přepočítání nové ceny
-    document.getElementById("total-price").textContent = `${finalPrice} Kč`; // Aktualizace zobrazení ceny
-
-    document.getElementById("discount-message").style.display = "none";
-    alert(`✅ Kód "${appliedCode}" byl úspěšně použit. Cena snížena na ${finalPrice} Kč.`);
-  } else {
-    document.getElementById("discount-message").style.display = "block";
-  }
-}
-
-// 🛠️ Funkce pro simulaci platby
-function simulatePayment(method) {
-  const orderData = {
-    email: formData.email,
-    name: formData.name,
-    planName: planName,
-    planPrice: planPrice,
-    recipePrice: recipePrice,
-    totalPrice: finalPrice, // Použijeme sníženou cenu
-    paymentMethod: method,
-    discountCode: appliedCode ? appliedCode : "Nepoužit", // Přidáme kód do dat, pokud byl použit
+  // Seznam platných slevových kódů a procentuální slevy
+  const discountCodes = {
+    "MARA10": 0.10,  // 10% sleva
+    "HONZA10": 0.10,  // Přidáme další partnery později
+    "ZLATKA10": 0.10  // Další partneři
   };
 
-  console.log("📩 Odesílám objednávku:", JSON.stringify(orderData, null, 2));
-}
+  let appliedDiscount = 0;  // Uložíme aktuální slevu
+  let appliedCode = "";  // Použitý kód
+  let finalPrice = totalPrice; // Uloží cenu po slevě
 
-// 🛠️ Funkce pro návrat na domovskou stránku
-function returnToHome() {
-  alert('✅ Děkujeme za vaši objednávku!');
-  window.location.href = 'index.html';
-}
+  function applyDiscount() {
+   const codeInput = document.getElementById("discount-code").value.trim();
+  
+    if (discountCodes[codeInput]) {
+      appliedDiscount = discountCodes[codeInput]; // Uloží procentuální slevu
+      appliedCode = codeInput; // Uloží použitý kód
 
-</script>
+      finalPrice = Math.round(totalPrice * (1 - appliedDiscount)); // Přepočítání nové ceny
+      document.getElementById("total-price").textContent = `${finalPrice} Kč`; // Aktualizace zobrazení ceny
+
+      document.getElementById("discount-message").style.display = "none";
+      alert(`✅ Kód "${appliedCode}" byl úspěšně použit. Cena snížena na ${finalPrice} Kč.`);
+    } else {
+      document.getElementById("discount-message").style.display = "block";
+    }
+  }
+
+    // 🛠️ Funkce pro návrat na domovskou stránku
+    function returnToHome() {
+      alert('✅ Děkujeme za vaši objednávku!');
+      window.location.href = 'index.html';
+    }
+  </script>
 </body>
 </html>
