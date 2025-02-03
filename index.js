@@ -46,7 +46,8 @@ app.post('/api/generate-pdf', async (req, res) => {
     planName = "Nezvoleno",
     planPrice = 0,
     recipePrice = 0,
-    totalPrice = 0
+    totalPrice = 0,
+    discountCode = "Nepoužit" // Pokud není kód použit, uloží se "Nepoužit"
   } = req.body;
 
   const wantsRecipes = recipePrice > 0;
@@ -110,6 +111,7 @@ app.post('/api/generate-pdf', async (req, res) => {
     doc.text(removeDiacritics(`Požaduje recepty: ${wantsRecipes ? 'Ano' : 'Ne'}`));
     doc.text(removeDiacritics(`Cena za recepty: ${recipePrice} Kč`));
     doc.text(removeDiacritics(`Celková cena: ${totalPrice} Kč`));
+    doc.text(removeDiacritics(`Slevový kód: ${discountCode}`));
     doc.end();
 
     writeStream.on('finish', async () => {
