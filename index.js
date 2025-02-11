@@ -9,6 +9,18 @@ require('dotenv').config(); // Načtení proměnných prostředí
 
 const app = express();
 
+// ✅ Přesměrování HTTP na HTTPS a www na non-www
+app.use((req, res, next) => {
+  if (req.headers['x-forwarded-proto'] !== 'https') {
+    return res.redirect(301, 'https://' + req.headers.host.replace(/^www\./, '') + req.url);
+  }
+  if (req.headers.host.startsWith('www.')) {
+    return res.redirect(301, 'https://' + req.headers.host.replace(/^www\./, '') + req.url);
+  }
+  next();
+});
+
+
 // ✅ Funkce pro odstranění diakritiky
 const removeDiacritics = (text) => {
   return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
