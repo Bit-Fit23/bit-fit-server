@@ -367,23 +367,105 @@ nav a:hover {
       transform: scale(1.05);
     }
     .about {
-      padding: 50px 20px;
-      text-align: center;
-      background-color: white;
+        padding: 50px 20px;
+        text-align: center;
+        max-width: 800px; /* Maximální šířka bloku */
+        margin: 0 auto; /* Vycentrování na stránce */
+        background-color: white;
     }
+
+    .about-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        max-width: 900px;
+        margin: auto;
+        text-align: left;
+        gap: 30px;
+    }
+
+    .founder-photo {
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        object-fit: cover;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .founder-container {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+    }
+
+    .founder-photo {
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        object-fit: cover;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .about-text {
+        max-width: 700px;
+        margin: 0 auto;
+        text-align: justify;
+    }
+
+
+    .about-summary {
+        background: #f9f9f9;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: justify;
+        max-width: 700px;
+        margin: 0 auto;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
     .about h2 {
-      color: #f4c542;
-      font-size: 2.5rem;
-      margin-bottom: 20px;
+        color: #f4c542;
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+        text-align: center; /* Zarovnání nadpisů na střed */
     }
+
+    .about h3 {
+        color: #333;
+        margin-top: 20px;
+        text-align: center; /* Zarovnání nadpisů na střed */
+    }
+
     .about p {
-      font-size: 1.1rem;
-      color: #555;
-      margin-bottom: 20px;
-      max-width: 800px;
-      margin-left: auto;
-      margin-right: auto;
+        font-size: 1.1rem;
+        color: #555;
+        line-height: 1.6;
     }
+
+    .about ul {
+        padding: 0;
+        list-style: none;
+        margin: 0 auto;
+        text-align: justify;
+        max-width: 700px;
+    }
+
+    .about ul li {
+        font-size: 1rem;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .about ul li::before {
+        content: "✔"; /* Checkmark */
+        color: #f4c542;
+        font-weight: bold;
+    }
+
     .testimonials {
       padding: 50px 20px;
       background-color: #f9f9f9;
@@ -453,6 +535,58 @@ nav a:hover {
         transform: translateY(0);
       }
     }
+    .steps {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        max-width: 800px;
+        margin: 0 auto;
+        text-align: center;
+        align-items: start;
+    }
+
+    .step {
+        background: #fff;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        height: 100%; /* Zajistí, že všechny boxy budou stejně vysoké */
+    }
+
+    .step h4 {
+        color: #6a6760;
+        font-size: 1.2rem;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .step p {
+        flex-grow: 1; /* Zajistí, že všechny texty budou stejně dlouhé */
+        text-align: justify;
+    }
+
+    /* 📌 Mobilní verze - zobrazení pod sebou */
+    @media (max-width: 768px) {
+        .steps {
+            grid-template-columns: 1fr;
+        }
+    }
+    .highlighted-heading {
+        text-align: center;
+        font-size: 1.8rem;
+        color: #f4c542;
+        background: #fff3cd;
+        padding: 10px;
+        border-radius: 10px;
+        margin-top: 40px;
+    }
+  
   </style>
 
 <!-- ✅ Google Analytics 4 -->
@@ -496,45 +630,78 @@ nav a:hover {
     <p>Pomůžeme vám vytvořit jídelníček na míru a dosáhnout vašich cílů.</p>
     <button onclick="location.href='formular.html'">Začněte hned</button>
   </section>
- <section class="about" id="about">
+  <section class="about" id="about">
     <h2>O nás</h2>
-    <p style="text-align: justify; text-justify: inter-word;">
-        Vítejte ve světě <strong>Bit-Fit</strong> – místo, kde zdravý životní styl začíná! Naší vášní je pomáhat lidem dosahovat jejich vysněných cílů – ať už jde o zhubnutí, nabírání svalů, nebo celkové zlepšení životního stylu. Věříme, že zdravé stravování nemusí být složité ani nudné. Naopak! Jídelníček může být chutný, pestrý a přitom dokonale přizpůsobený vašim potřebám.
-    </p>
-    <p style="text-align: justify; text-justify: inter-word;">
-        V <strong>Bit-Fit</strong> spojujeme nejnovější poznatky o výživě s osobním přístupem ke každému klientovi. Váš plán vytvoříme na míru – na základě vámi zadaných údajů, preferencí a cílů. Přitom nezapomínáme ani na jednoduchost a praktičnost. Chápeme, že váš čas je drahý, proto vše přizpůsobujeme tak, aby byla příprava jídla snadná a rychlá.
-    </p>
-    <h3>Jak to funguje?</h3>
-    <ul style="text-align: justify; max-width: 800px; margin: 20px auto; padding: 0; list-style: none;">
-        <li style="margin-bottom: 20px;">
-            <strong>1. Vyplňte jednoduchý dotazník:</strong> Stačí zadat vaše údaje, stravovací preference a cíle. Díky tomu získáme všechny potřebné informace, abychom mohli vytvořit plán přesně na míru.
-        </li>
-        <li style="margin-bottom: 20px;">
-            <strong>2. Zvolte si plán, který vám nejlépe vyhovuje:</strong> Nabízíme plány od jednodenních analýz až po kompletní měsíční jídelníčky. Vy rozhodujete, co potřebujete!
-        </li>
-        <li style="margin-bottom: 20px;">
-            <strong>3. Potvrďte objednávku a získejte svůj plán:</strong> Po dokončení objednávky zašleme váš osobní jídelníček včetně všech detailů na váš e-mail. Plán zahrnuje nejen jídelníček, ale i přehled makro a mikronutrientů, BMI a TDEE analýzu.
-        </li>
-        <li style="margin-bottom: 20px;">
-            <strong>4. Začněte svou cestu ke zdravému životnímu stylu:</strong> Sledujte svůj plán, užívejte si chutné pokrmy a sledujte, jak se vaše tělo mění.
-        </li>
-        <h3>Ukázka analýzy a jídelníčku</h3>
 
-        <div class="analysis">
-            <h4>📊 Analýza: Výpočet kalorického příjmu a makroživin</h4>
-            <p>Na základě vaší výšky, váhy, věku a aktivity jsme spočítali váš optimální kalorický příjem:</p>
-            <ul>
-                <li><strong>Bazální metabolismus (BMR):</strong> 1665 kcal</li>
-                <li><strong>Celkový denní energetický výdej (TDEE):</strong> 2581 kcal</li>
-                <li><strong>Doporučený kalorický příjem pro nárůst svalové hmoty:</strong> 2839 kcal</li>
-            </ul>
-            <h4>🍽 Doporučené rozložení makroživin:</h4>
-            <ul>
-                <li><strong>Bílkoviny:</strong> 248 g (35 % celkového příjmu)</li>
-                <li><strong>Sacharidy:</strong> 319 g (45 % celkového příjmu)</li>
-                <li><strong>Tuky:</strong> 63 g (20 % celkového příjmu)</li>
-            </ul>
+    <!-- Fotky zakladatele -->
+    <div class="founder-container">
+        <img src="founder.jpg" alt="Zakladatel Bit-Fit" class="founder-photo">
+        <img src="founder2.jpg" alt="Zakladatel Bit-Fit" class="founder-photo">
+    </div>
+
+    <div class="about-text">
+        <p>
+            Ahoj, jmenuji se <strong>David</strong> a jsem zakladatelem Bit-Fit. Moje cesta ke zdravé výživě začala, když jsem sám hledal efektivní způsob, jak se lépe stravovat a cítit se lépe.
+        </p>
+        <p>
+            Vytvořil jsem Bit-Fit, protože jsem viděl, že mnoho lidí se snaží najít správnou stravu, ale nemají čas hledat recepty nebo počítat makroživiny. Chci ukázat, že zdravé stravování nemusí být složité ani nudné – může být chutné, efektivní a hlavně jednoduché.
+        </p>
+    </div>
+
+    <!-- "Proč Bit-Fit?" zůstává v původní podobě -->
+    <h3>✅ Proč Bit-Fit?</h3>
+    <ul>
+        <li>🍏 <strong>Personalizované jídelníčky</strong> přizpůsobené vašim cílům</li>
+        <li>💪 <strong>Efektivní a chutné recepty</strong>, které zvládne každý</li>
+        <li>⏳ <strong>Šetříme váš čas</strong> – nemusíte složitě hledat a počítat jídlo</li>
+        <li>🔍 <strong>Odborné poradenství</strong> na základě vědeckých principů</li>
+    </ul>
+
+    <!-- Upravený blok, aby vizuálně odpovídal zbytku -->
+    <div class="about-summary">
+        <p>
+            V <strong>Bit-Fit</strong> spojujeme nejnovější poznatky o výživě s osobním přístupem ke každému klientovi. Váš plán vytvoříme na míru – na základě vámi zadaných údajů, preferencí a cílů. Přitom nezapomínáme ani na jednoduchost a praktičnost. Chápeme, že váš čas je drahý, proto vše přizpůsobujeme tak, aby byla příprava jídla snadná a rychlá.
+        </p>
+    </div>
+
+    <h3>📌 Jak to funguje?</h3>
+    <div class="steps">
+        <div class="step">
+            <h4>1️⃣ Vyplňte jednoduchý anonymní osobní dotazník</h4>
+            <p>Stačí zadat vaše údaje, stravovací preference a cíle.</p>
         </div>
+        <div class="step">
+            <h4>2️⃣ Zvolte si plán, který vám nejlépe vyhovuje</h4>
+            <p>Nabízíme plány od jednodenních analýz až po kompletní měsíční jídelníčky.</p>
+        </div>
+        <div class="step">
+            <h4>3️⃣ Potvrďte objednávku a získejte svůj plán</h4>
+            <p>Po dokončení objednávky zašleme váš osobní jídelníček e-mailem.</p>
+        </div>
+        <div class="step">
+            <h4>4️⃣ Začněte svou cestu ke zdravému životnímu stylu</h4>
+            <p>Sledujte svůj plán, užívejte si chutné pokrmy a sledujte, jak se vaše tělo mění.</p>
+        </div>
+    </div>
+
+    <h3 class="highlighted-heading">📊 Ukázka analýzy a jídelníčku</h3>
+
+    <div class="analysis">
+        <h4>Výpočet kalorického příjmu a makroživin</h4>
+        <p>Na základě vaší výšky, váhy, věku a aktivity jsme spočítali váš optimální kalorický příjem:</p>
+        <ul>
+            <li><strong>Bazální metabolismus (BMR):</strong> 1665 kcal</li>
+            <li><strong>Celkový denní energetický výdej (TDEE):</strong> 2581 kcal</li>
+            <li><strong>Doporučený kalorický příjem pro nárůst svalové hmoty:</strong> 2839 kcal</li>
+        </ul>
+    
+        <h4>🍽 Doporučené rozložení makroživin:</h4>
+          <ul>
+              <li><strong>Bílkoviny:</strong> 248 g (35 % celkového příjmu)</li>
+              <li><strong>Sacharidy:</strong> 319 g (45 % celkového příjmu)</li>
+              <li><strong>Tuky:</strong> 63 g (20 % celkového příjmu)</li>
+          </ul>
+    </div>
         
         <div class="meal-plan">
             <h4>🍎 Den 1 – Individuální stravovací plán</h4>
