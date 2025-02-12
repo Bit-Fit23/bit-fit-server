@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
     <!-- ✅ Titulek a meta popis -->
-    <title>Bit-Fit | Individuální jídelníčky pro zdravý životní styl</title>
-    <meta name="description" content="Chcete zdravý životní styl? Bit-Fit vám vytvoří jídelníček na míru – hubnutí, svalová hmota nebo lepší zdraví. Začněte ještě dnes!">
+    <title>Bit-Fit | Jídelníček na míru – zdravá strava, hubnutí, fitness</title>
+    <meta name="description" content="Individuální jídelníček na míru pro hubnutí, nabírání svalů a zdravý životní styl. Rychlá analýza, vědecký přístup, chutná jídla. Začněte ještě dnes!">
     
     <!-- ✅ SEO meta tagy -->
     <meta name="keywords" content="jídelníček na míru, zdravý životní styl, fitness plán, výživové poradenství, zdravá strava, hubnutí, nabírání svalů">
@@ -34,7 +34,7 @@
     <link rel="stylesheet" href="styles.css">
   
     <!-- ✅ JavaScript soubory s `defer` -->
-    <script defer src="script.js"></script>
+    <script async src="script.js"></script>
 
     <!-- ✅ Favicon -->
     <link rel="icon" type="image/png" href="https://bit-fit.cz/favicon.png">
@@ -198,6 +198,25 @@ nav a:hover {
     .hero {
         margin-top: -40px; /* Přiblížení textu ještě více */
     }
+    
+    .hero h1 {
+        font-size: 2rem;
+        text-align: center;
+    }
+
+    .hero p {
+        font-size: 1rem;
+    }
+
+    .steps {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .step {
+        padding: 10px;
+    }
+
 
   /* 📌 HAMBURGER MENU - zobrazí se pouze na mobilech */
   .menu-toggle {
@@ -611,10 +630,11 @@ nav a:hover {
   fbq('init', 'XXXXXXXXXXXXXXX');
   fbq('track', 'PageView');
 </script>
+  
 </head>
 <body>
   <header>
-    <img src="./bit_fit_logo.png" alt="Bit-Fit Logo">
+    <img src="./bit_fit_logo.webp" alt="Bit-Fit Logo" width="300" height="auto" loading="lazy">
      <nav>
       <ul>
         <li><a href="index.html">Domů</a></li>
@@ -631,7 +651,7 @@ nav a:hover {
     <button onclick="location.href='formular.html'">Začněte hned</button>
   </section>
   <section class="about" id="about">
-    <h2>O nás</h2>
+    <h2>Proč Bit-Fit?</h2>
 
     <!-- Fotky zakladatele -->
     <div class="founder-container">
@@ -641,7 +661,7 @@ nav a:hover {
 
     <div class="about-text">
         <p>
-            Ahoj, jmenuji se <strong>David</strong> a jsem zakladatelem Bit-Fit. Moje cesta ke zdravé výživě začala, když jsem sám hledal efektivní způsob, jak se lépe stravovat a cítit se lépe.
+            Ahoj, jmenuji se <strong>David</strong> a jsem zakladatelem Bit-Fit. Moje cesta ke zdravé výživě začala, když jsem sám hledal efektivní způsob, jak se lépe stravovat a cítit se lépe. Přečetl jsem nespočet článků, knih, blogů a dalších výživových doporučení, abych došel přes zákoutí mnoha diet k jednoduchému výsledku - jednoduchost a efektivita.
         </p>
         <p>
             Vytvořil jsem Bit-Fit, protože jsem viděl, že mnoho lidí se snaží najít správnou stravu, ale nemají čas hledat recepty nebo počítat makroživiny. Chci ukázat, že zdravé stravování nemusí být složité ani nudné – může být chutné, efektivní a hlavně jednoduché.
@@ -664,7 +684,7 @@ nav a:hover {
         </p>
     </div>
 
-    <h3>📌 Jak to funguje?</h3>
+    <h3>📌 Jak získat jídelníček na míru v Bit-Fit?</h3>
     <div class="steps">
         <div class="step">
             <h4>1️⃣ Vyplňte jednoduchý anonymní osobní dotazník</h4>
@@ -752,7 +772,6 @@ nav a:hover {
     </p>
 </section>
 
-
     <footer>
     <p>&copy; 2025 Bit-Fit. Všechna práva vyhrazena. | <a href="ochrana.html">Ochrana osobních údajů</a></p>
     <div class="cookie-banner">
@@ -807,5 +826,28 @@ document.addEventListener("DOMContentLoaded", function () {
   window.addEventListener("resize", addMobileMenu); // ✅ Dynamická změna při změně velikosti okna
 });
   </script>  
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Bit-Fit",
+    "url": "https://bit-fit.cz",
+    "logo": "https://bit-fit.cz/bit_fit_logo.webp",
+    "description": "Individuální jídelníček na míru pro hubnutí, nabírání svalů a zdravý životní styl.",
+    "sameAs": [
+      "https://www.facebook.com/bitfit",
+      "https://www.instagram.com/bitfit",
+      "https://www.twitter.com/bitfit"
+    ],
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+420123456789",
+      "contactType": "customer service",
+      "areaServed": "CZ",
+      "availableLanguage": ["Czech", "English"]
+    }
+  }
+</script>
 </body>
 </html>
