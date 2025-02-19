@@ -6,11 +6,12 @@
   
     <!-- ✅ Titulek a meta popis -->
     <title>Bit-Fit | Jídelníček na míru – zdravá strava, hubnutí, fitness</title>
-    <meta name="description" content="Individuální jídelníček na míru pro hubnutí, nabírání svalů a zdravý životní styl. Rychlá analýza, vědecký přístup, chutná jídla. Začněte ještě dnes!">
+    <meta name="description" content="Získejte personalizovaný jídelníček na míru pro hubnutí, svalovou hmotu a zdravý životní styl. Rychlá analýza, vědecký přístup a chutné recepty – začněte dnes!">
     
     <!-- ✅ SEO meta tagy -->
-    <meta name="keywords" content="jídelníček na míru, zdravý životní styl, fitness plán, výživové poradenství, zdravá strava, hubnutí, nabírání svalů">
+    <meta name="keywords" content="jídelníček na míru, zdravá strava, výživový plán, hubnutí, fitness jídelníček, výživové poradenství, nabírání svalů, personalizovaná výživa">
     <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://bit-fit.cz">
     <meta name="author" content="Bit-Fit.cz">
   
     <!-- ✅ Open Graph (Facebook & LinkedIn) -->
@@ -28,7 +29,9 @@
   
     <!-- ✅ Preload fontů pro rychlejší vykreslení -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" as="style">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" async>
   
     <!-- ✅ Načtení CSS (externí soubor pro lepší cacheování) -->
     <link rel="stylesheet" href="styles.css">
@@ -419,14 +422,6 @@ nav a:hover {
         margin-bottom: 20px;
     }
 
-    .founder-photo {
-        width: 180px;
-        height: 180px;
-        border-radius: 50%;
-        object-fit: cover;
-        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    }
-
     .about-text {
         max-width: 700px;
         margin: 0 auto;
@@ -635,7 +630,7 @@ nav a:hover {
 <body>
   <header>
     <img src="./bit_fit_logo.webp" alt="Bit-Fit Logo" width="300" height="auto" loading="lazy">
-     <nav>
+      <nav aria-label="Hlavní navigace">
       <ul>
         <li><a href="index.html">Domů</a></li>
         <li><a href="formular.html">Vyplnit formulář</a></li>
@@ -655,13 +650,14 @@ nav a:hover {
 
     <!-- Fotky zakladatele -->
     <div class="founder-container">
-        <img src="founder.jpg" alt="Zakladatel Bit-Fit" class="founder-photo">
-        <img src="founder2.jpg" alt="Zakladatel Bit-Fit" class="founder-photo">
+        <img src="founder.jpg" alt="Zakladatel Bit-Fit" class="founder-photo" loading="lazy">
+        <img src="founder2.jpg" alt="Zakladatel Bit-Fit" class="founder-photo" loading="lazy">
+
     </div>
 
     <div class="about-text">
         <p>
-            Ahoj, jmenuji se <strong>David</strong> a jsem zakladatelem Bit-Fit. Moje cesta ke zdravé výživě začala, když jsem sám hledal efektivní způsob, jak se lépe stravovat a cítit se lépe. Přečetl jsem nespočet článků, knih, blogů a dalších výživových doporučení, abych došel přes zákoutí mnoha diet k jednoduchému výsledku - jednoduchost a efektivita.
+            Ahoj, jmenuji se <strong>David</strong> a jsem zakladatelem Bit-Fit. Moje cesta ke zdravé výživě začala, když jsem sám hledal efektivní způsob, jak se lépe stravovat a cítit se lépe. Přečetl jsem nespočet článků, knih, blogů a dalších výživových doporučení, abych došel přes zákoutí mnoha diet k jednoduchému výsledku - jednoduchost, efektivita a hlavně dlouhodobá udržitelnost.
         </p>
         <p>
             Vytvořil jsem Bit-Fit, protože jsem viděl, že mnoho lidí se snaží najít správnou stravu, ale nemají čas hledat recepty nebo počítat makroživiny. Chci ukázat, že zdravé stravování nemusí být složité ani nudné – může být chutné, efektivní a hlavně jednoduché.
@@ -786,6 +782,8 @@ document.addEventListener("DOMContentLoaded", function () {
         const menuToggle = document.createElement("button");
         menuToggle.classList.add("menu-toggle");
         menuToggle.textContent = "☰";
+        menuToggle.setAttribute("role", "button");
+        menuToggle.setAttribute("aria-label", "Otevřít menu");
 
         const header = document.querySelector("header");
         const menu = document.querySelector("nav ul");
