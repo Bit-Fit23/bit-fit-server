@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Vaše příběhy - Bit-Fit">
+  <meta name="description" content="Přečtěte si skutečné příběhy lidí, kteří dosáhli skvělých výsledků s jídelníčky na míru od Bit-Fit. Inspirujte se jejich úspěchy!">
   <title>Vaše příběhy | Bit-Fit</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
@@ -17,15 +17,19 @@
 
     header {
       background-color: #f4c542;
-      padding: 20px 50px;
-      text-align: center;
+      padding: 20px 8%;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
     header img {
-      height: 50px;
+      height: 60px;
+      transition: transform 0.3s ease;
+    }
+
+    header img:hover {
+      transform: scale(1.1);
     }
 
     nav {
@@ -98,10 +102,11 @@
     }
 
     .story-content p {
-      font-size: 1rem;
-      line-height: 1.5;
-      margin-bottom: 15px;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 20px;
       text-align: justify;
+      color: #444;
     }
 
     .story-content button {
@@ -119,6 +124,8 @@
     .story-content button:hover {
       background-color: #333;
       color: #f4c542;
+      transform: scale(1.05);
+      transition: transform 0.2s ease, background-color 0.3s ease;
     }
 
     footer {
@@ -140,7 +147,7 @@
 </head>
 <body>
   <header>
-    <img src="./bit_fit_logo.png" alt="Bit-Fit Logo">
+    <img src="./bit_fit_logo.webp" alt="Bit-Fit Logo" loading="lazy">
     <nav>
       <a href="index.html">Domů</a>
       <a href="formular.html">Vyplnit formulář</a>
@@ -150,15 +157,15 @@
 
   <main class="stories">
     <div class="story">
-      <img src="pribeh2.jpg" alt="Petra">      
-      <div class="story-content">
+      <img src="pribeh2.jpg" alt="Proměna Petry díky jídelníčku Bit-Fit" loading="lazy">
+            <div class="story-content">
         <h3>Petra</h3>
         <p>Zakoupila jsem si plán na týden, vše od objednání, až po vyhotovení jídelníčku s recepty bylo v pohodě. Jídelníček byl pestrý, nenudil, recepty byly dobře napsané. Vše bylo profi zpracováno. Zde je má proměna .</p>
       </div>
     </div>
 
     <div class="story">
-      <img src="pribeh3.jpg" alt="Lukáš">
+      <img src="pribeh3.jpg" alt="Lukášova zkušenost s jídelníčkem Bit-Fit" loading="lazy">
             <div class="story-content">
         <h3>Lukáš</h3>
         <p>Objednal jsem si tříměsíční plán s konzultací, byl jsem fakt překvapenej, jak vše proběhlo. Moc doporučuju, skvělá služba!</p>
