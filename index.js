@@ -6,6 +6,9 @@ const fs = require('fs');
 const path = require('path');
 const cors = require('cors');
 require('dotenv').config(); // Načtení proměnných prostředí
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
 
 const app = express();
 
@@ -128,43 +131,40 @@ app.post('/api/generate-pdf', async (req, res) => {
 
     writeStream.on('finish', async () => {
       try {
-        // ✅ Ověření SMTP před odesláním
-        if (!process.env.SMTP_HOST || !process.env.SMTP_USER || !process.env.SMTP_PASS) {
-          throw new Error("❌ Chybí SMTP konfigurace!");
-        }
-
-        const transporter = nodemailer.createTransport({
-          host: process.env.SMTP_HOST,
-          port: parseInt(process.env.SMTP_PORT, 10) || 587,
-          secure: parseInt(process.env.SMTP_PORT, 10) === 465,
-          auth: {
-            user: process.env.SMTP_USER,
-            pass: process.env.SMTP_PASS,
-          },
-        });
-
-        console.log("📩 Odesílám e-mail administrátorovi...");
-        await transporter.sendMail({
-          from: process.env.SMTP_USER,
-          to: process.env.SMTP_USER,
+        const msgToAdmin = {
+          to: 'info@bit-fit.cz',
+          from: 'info@bit-fit.cz', // tato adresa by měla být ověřená v SendGrid
           subject: 'Nový dotazník - Bit-Fit',
-          text: '📎 V příloze naleznete nový vyplněný dotazník.',
-          attachments: [{ filename: 'form_output.pdf', path: pdfPath }],
-        });
-
-        console.log("📩 Odesílám e-mail klientovi...");
-        await transporter.sendMail({
-          from: process.env.SMTP_USER,
+          html: `<p>📎 V příloze naleznete nový vyplněný dotazník.</p>`,
+          attachments: [
+            {
+              content: fs.readFileSync(pdfPath).toString('base64'),
+              filename: 'form_output.pdf',
+              type: 'application/pdf',
+              disposition: 'attachment',
+            },
+          ],
+        };
+        
+        const msgToClient = {
           to: email,
+          from: 'info@bit-fit.cz',
           subject: '✅ Potvrzení přijetí dotazníku - Bit-Fit',
-          text: `Dobry den ${name},\n\nDekujeme za vyplneni dotazniku. Nas tym zacal pracovat na Vasem jidelnicku. Brzy Vas budeme kontaktovat.\n\nS pozdravem,\nTym Bit-Fit`,
-        });
-
+          html: `<p>Dobrý den ${name},<br><br>Děkujeme za vyplnění dotazníku. Náš tým začal pracovat na vašem jídelníčku. Brzy vás budeme kontaktovat.<br><br>S pozdravem,<br>Bit-Fit tým</p>`,
+        };
+        
+        console.log("📩 Odesílám e-mail administrátorovi...");
+        await sgMail.send(msgToAdmin);
+        
+        console.log("📩 Odesílám e-mail klientovi...");
+        await sgMail.send(msgToClient);
+        
         console.log("✅ E-maily úspěšně odeslány.");
         res.status(200).json({ success: true, message: '📄 PDF bylo úspěšně vygenerováno a e-maily byly odeslány.' });
-
+        
         fs.unlinkSync(pdfPath);
         console.log('✅ PDF odstraněno.');
+          
       } catch (emailError) {
         console.error('❌ Chyba při odesílání e-mailů:', emailError);
         res.status(500).json({ success: false, error: 'Chyba při odesílání e-mailů.' });
